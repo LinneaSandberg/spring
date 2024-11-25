@@ -10,6 +10,7 @@ const LandingPage = () => {
                 This app helps you manage your expenses efficiently and stay on track with your savings goals.
             </Text>
 
+
             <Link href="/login">Login</Link>
             <Link href="/signup">Sign up</Link>
         </View>
@@ -19,8 +20,9 @@ const LandingPage = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        alignContent: 'center',
         justifyContent: 'center',
-        padding: 20,
+        padding: 40,
     },
     title: {
         fontSize: 24,

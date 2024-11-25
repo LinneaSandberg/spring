@@ -1,10 +1,11 @@
 import React, { createContext, useState, useEffect, PropsWithChildren } from 'react';
-import { signInWithEmailAndPassword, signOut, updateEmail, updatePassword, User, UserCredential } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateEmail, updatePassword, User, UserCredential } from 'firebase/auth';
 import { auth } from '../services/firebase';
 import * as SecureStore from 'expo-secure-store';
 
 interface AuthContextType {
     user: User | null;
+    signup: (email: string, password: string) => Promise<UserCredential>;
     login: (email: string, password: string) => Promise<UserCredential>;
     logout: () => Promise<void>;
     isLoading: boolean;
@@ -38,6 +39,9 @@ const AuthContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
         loadSession();
     }, []);
 
+    const signup = (email: string, password: string) => {
+        return createUserWithEmailAndPassword(auth, email, password);
+    };
 
     // sign in
     const login = async (email: string, password: string) => {
@@ -79,7 +83,17 @@ const AuthContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ user, isLoading, userEmail, userPassword, setEmail, setPassword, login, logout }}>
+        <AuthContext.Provider value={{
+            user,
+            isLoading,
+            userEmail,
+            userPassword,
+            setEmail,
+            setPassword,
+            signup,
+            login,
+            logout
+        }}>
             {children}
         </AuthContext.Provider>
     )
