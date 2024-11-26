@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { LoginInfo } from "@/types/Auth.types";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { useRouter } from "expo-router";
@@ -74,11 +74,15 @@ const LoginScreen = () => {
       />
       {errors.password && <Text style={styles.error}>{errors.password.message}</Text>}
 
-      <Button
-        title={isLoggingIn ? "Logging in..." : "Login"}
+      <TouchableOpacity
+        style={[styles.button, isLoggingIn && styles.buttonDisabled]} // Style for the button
         onPress={handleSubmit(onLogin)}
         disabled={isLoggingIn}
-      />
+      >
+        <Text style={styles.buttonText}>
+          {isLoggingIn ? "Logging in..." : "Login"}
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -88,17 +92,22 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignContent: 'center',
     justifyContent: 'center',
     padding: 20,
+    boxSizing: 'border-box',
   },
   title: {
-    fontSize: 24,
+    fontSize: 30,
     marginBottom: 20,
     textAlign: 'center',
+    color: '#1E1E1E',
   },
   input: {
     height: 40,
     borderColor: '#ccc',
+    backgroundColor: '#F3F3F3',
+    borderRadius: 10,
     borderWidth: 1,
     marginBottom: 15,
     paddingLeft: 8,
@@ -106,6 +115,24 @@ const styles = StyleSheet.create({
   error: {
     color: 'red',
     fontSize: 12,
+  },
+  button: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginBottom: 10,
+    backgroundColor: '#FAECC4',
+    borderColor: '#1E1E1E',
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 20,
+  },
+  buttonDisabled: {
+    backgroundColor: '#A9A9A9',
+  },
+  buttonText: {
+    color: '#1E1E1E',
+    fontSize: 16,
+    textAlign: 'center',
   },
 });
 
