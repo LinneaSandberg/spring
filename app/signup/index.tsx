@@ -21,6 +21,7 @@ const RegisterScreen = () => {
                 uid: newUser.user.uid,
                 email: data.email,
                 _id: docRef.id,
+                name: data.name,
             });
 
             alert('User registered successfully');

@@ -1,4 +1,5 @@
 export type RegisterInfo = {
+  name: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -12,6 +13,7 @@ export type User = {
 };
 
 export type CreateUser = {
+  name: string;
   _id: string;
   email: string;
   uid: string;

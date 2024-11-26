@@ -26,7 +26,7 @@ const HomeScreen = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Hello, this is your dashboard</Text>
+            <Text style={styles.title}>Hello, this is your dashboard: {userName}</Text>
         </View>
     );
 
