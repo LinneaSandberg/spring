@@ -1,89 +1,46 @@
-import { useAuth } from "@/hooks/useAuth";
-import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
-import * as Yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm, Controller, SubmitHandler } from 'react-hook-form';
-import { RegisterInfo } from "@/types/Auth.types";
-
-const registrationSchema = Yup.object().shape({
-    email: Yup.string()
-        .email('Invalid email format')
-        .required('Email is required'),
-    password: Yup.string()
-        .min(6, 'Password must be at least 6 characters')
-        .required('Password is required'),
-    confirmPassword: Yup.string()
-        .oneOf([Yup.ref('password'), undefined], 'Passwords must match')
-        .required('Confirm Password is required'),
-});
+import { View, Text, StyleSheet } from 'react-native';
+import RegisterForm from '../../components/RegisterForm';
+import { useAuth } from '@/hooks/useAuth';
+import { SubmitHandler } from 'react-hook-form';
+import { RegisterInfo } from '@/types/Auth.types';
+import { doc, setDoc } from 'firebase/firestore';
+import { registerUserCol } from '@/services/firebase';
+import { FirebaseError } from 'firebase/app';
+import { useRouter } from 'expo-router';
 
 const RegisterScreen = () => {
     const { signup } = useAuth();
-    const { control, handleSubmit, formState: { errors } } = useForm({
-        resolver: yupResolver(registrationSchema),
-    });
+    const router = useRouter();
 
-    const onSubmit: SubmitHandler<RegisterInfo> = async (data) => {
+    const handleRegistration: SubmitHandler<RegisterInfo> = async (data) => {
         try {
-            await signup(data.email, data.password);
+            const newUser = await signup(data.email, data.password);
+            const docRef = doc(registerUserCol, newUser.user.uid);
+
+            await setDoc(docRef, {
+                uid: newUser.user.uid,
+                email: data.email,
+                _id: docRef.id,
+            });
+
+            alert('User registered successfully');
+            router.push('/login');
 
         } catch (error) {
-            console.error("Error register an account: ", error);
+            if (error instanceof FirebaseError) {
+                alert(error.message);
+            } else if (error instanceof Error) {
+                alert(error.message);
+            } else {
+                alert('An error occurred');
+            }
         }
-    };
+    }
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Register an account</Text>
-
-            <Controller
-                control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Email"
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                    />
-                )}
-                name="email"
-            />
-            {errors.email && <Text style={styles.error}>{errors.email.message}</Text>}
-
-            <Controller
-                control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Password"
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                        secureTextEntry
-                    />
-                )}
-                name="password"
-            />
-            {errors.password && <Text style={styles.error}>{errors.password.message}</Text>}
-
-            <Controller
-                control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Confirm Password"
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                        secureTextEntry
-                    />
-                )}
-                name="confirmPassword"
-            />
-            {errors.confirmPassword && <Text style={styles.error}>{errors.confirmPassword.message}</Text>}
-
-            <Button title="Register" onPress={handleSubmit(onSubmit)} />
+            <RegisterForm onRegister={handleRegistration} />
         </View>
     );
 };
@@ -98,17 +55,6 @@ const styles = StyleSheet.create({
         fontSize: 24,
         marginBottom: 20,
         textAlign: 'center',
-    },
-    input: {
-        height: 40,
-        borderColor: '#1E1E1E',
-        borderWidth: 1,
-        marginBottom: 15,
-        paddingLeft: 8,
-    },
-    error: {
-        color: 'red',
-        fontSize: 12,
     },
 });
 

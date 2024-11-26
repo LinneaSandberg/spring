@@ -8,7 +8,7 @@ export default function RootLayout() {
         <Stack.Screen name="index" />
         <Stack.Screen name="login/index" />
         <Stack.Screen name="signup/index" />
-        <Stack.Screen name="user/index" />
+        <Stack.Screen name="home/index" />
       </Stack>
     </AuthContextProvider>
   );

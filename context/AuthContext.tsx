@@ -30,8 +30,7 @@ const AuthContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
         const loadSession = async () => {
             const session = await SecureStore.getItemAsync('session');
             if (session) {
-                const parsedUser = JSON.parse(session);
-                setUser(parsedUser);
+                setUser(JSON.parse(session));
             }
             setIsLoading(false);
         };
@@ -39,27 +38,24 @@ const AuthContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
         loadSession();
     }, []);
 
-    const signup = (email: string, password: string) => {
-        return createUserWithEmailAndPassword(auth, email, password);
+    const signup = async (email: string, password: string) => {
+        const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+        setUser(userCredentials.user);
+        await SecureStore.setItemAsync('session', JSON.stringify(userCredentials.user));
+        return userCredentials;
     };
 
     // sign in
     const login = async (email: string, password: string) => {
-        try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            setUser(userCredential.user);
-
-            await SecureStore.setItemAsync('session', JSON.stringify(userCredential.user));
-            return userCredential;
-        } catch (error) {
-            console.error("Error signing in: ", error);
-            throw error;
-        }
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        setUser(userCredential.user);
+        await SecureStore.setItemAsync('session', JSON.stringify(userCredential.user));
+        return userCredential;
     };
 
     // sign out
-    const logout = () => {
-        return signOut(auth);
+    const logout = async () => {
+        await signOut(auth);
         setUser(null);
         SecureStore.deleteItemAsync('session');
     };
