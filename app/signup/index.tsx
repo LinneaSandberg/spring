@@ -53,9 +53,10 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     title: {
-        fontSize: 24,
+        fontSize: 30,
         marginBottom: 20,
         textAlign: 'center',
+        color: '#1E1E1E',
     },
 });
 

@@ -75,7 +75,7 @@ const LoginScreen = () => {
       {errors.password && <Text style={styles.error}>{errors.password.message}</Text>}
 
       <TouchableOpacity
-        style={[styles.button, isLoggingIn && styles.buttonDisabled]} // Style for the button
+        style={[styles.button, isLoggingIn && styles.buttonDisabled]}
         onPress={handleSubmit(onLogin)}
         disabled={isLoggingIn}
       >
@@ -86,8 +86,6 @@ const LoginScreen = () => {
     </View>
   );
 };
-
-
 
 const styles = StyleSheet.create({
   container: {

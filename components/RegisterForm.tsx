@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, TextInput, Button, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -118,11 +118,16 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
             />
             {errors.confirmPassword && <Text style={styles.error}>{errors.confirmPassword.message}</Text>}
 
-            <Button
-                title={isRegistering ? "Registering..." : "Register"}
-                disabled={isRegistering}
+            <TouchableOpacity
+                style={[styles.button, isRegistering && styles.buttonDisabled]}
                 onPress={handleSubmit(onSubmitRegistration)}
-            />
+                disabled={isRegistering}
+            >
+                <Text style={styles.buttonText}>
+                    {isRegistering ? "Registering..." : "Register"}
+                </Text>
+            </TouchableOpacity>
+
             {isRegistering && <ActivityIndicator size={24} color="blue" />}
         </View>
     );
@@ -134,7 +139,9 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 40,
-        borderColor: '#1E1E1E',
+        borderColor: '#ccc',
+        backgroundColor: '#F3F3F3',
+        borderRadius: 10,
         borderWidth: 1,
         marginBottom: 15,
         paddingLeft: 8,
@@ -142,6 +149,24 @@ const styles = StyleSheet.create({
     error: {
         color: 'red',
         fontSize: 12,
+    },
+    button: {
+        fontSize: 18,
+        textAlign: 'center',
+        marginBottom: 10,
+        backgroundColor: '#FAECC4',
+        borderColor: '#1E1E1E',
+        borderWidth: 1,
+        padding: 10,
+        borderRadius: 20,
+    },
+    buttonDisabled: {
+        backgroundColor: '#A9A9A9',
+    },
+    buttonText: {
+        color: '#1E1E1E',
+        fontSize: 16,
+        textAlign: 'center',
     },
 });
 
