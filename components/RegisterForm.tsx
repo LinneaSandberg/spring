@@ -10,6 +10,9 @@ interface RegisterFormProps {
 }
 
 const registrationSchema = Yup.object().shape({
+    name: Yup.string()
+        .min(3, 'Name must be at least 3 characters')
+        .required('Name is required'),
     email: Yup.string()
         .email('Invalid email format')
         .required('Email is required'),
@@ -49,6 +52,22 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
 
     return (
         <View style={styles.formContainer}>
+            <Controller
+                control={control}
+                name="name"
+                render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Name"
+                        placeholderTextColor="#aaa"
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                    />
+                )}
+            />
+            {errors.name && <Text style={styles.error}>{errors.name.message}</Text>}
+
             <Controller
                 control={control}
                 name="email"
