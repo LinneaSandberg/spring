@@ -16,3 +16,8 @@ export type CreateUser = {
   email: string;
   uid: string;
 };
+
+export type LoginInfo = {
+  email: string;
+  password: string;
+};

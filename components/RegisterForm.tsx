@@ -56,6 +56,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
                     <TextInput
                         style={styles.input}
                         placeholder="Email"
+                        placeholderTextColor="#aaa"
                         onBlur={onBlur}
                         onChangeText={onChange}
                         value={value}
@@ -71,6 +72,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
                     <TextInput
                         style={styles.input}
                         placeholder="Password"
+                        placeholderTextColor="#aaa"
                         onBlur={onBlur}
                         onChangeText={onChange}
                         value={value}
@@ -87,6 +89,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
                     <TextInput
                         style={styles.input}
                         placeholder="Confirm Password"
+                        placeholderTextColor="#aaa"
                         onBlur={onBlur}
                         onChangeText={onChange}
                         value={value}
@@ -116,7 +119,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         marginBottom: 15,
         paddingLeft: 8,
-        color: '#1E1E1E',
     },
     error: {
         color: 'red',

@@ -4,33 +4,32 @@ import { auth } from '../services/firebase';
 import * as SecureStore from 'expo-secure-store';
 
 interface AuthContextType {
-    user: User | null;
+    currentUser: User | null;
     signup: (email: string, password: string) => Promise<UserCredential>;
     login: (email: string, password: string) => Promise<UserCredential>;
     logout: () => Promise<void>;
     isLoading: boolean;
 
-    userEmail: string | null;
-    userPassword: string | null;
-    setEmail: (email: string) => void;
-    setPassword: (password: string) => void;
+    // userEmail: string | null;
+    // userPassword: string | null;
+    // setEmail: (email: string) => void;
+    // setPassword: (password: string) => void;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 const AuthContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const [isLoading, setIsLoading] = useState(true);
-    const [user, setUser] = useState<User | null>(null);
+    const [currentUser, setCurrentUser] = useState<User | null>(null);
 
-    const [session, setSession] = useState(null);
-    const [userEmail, setUserEmail] = useState<string | null>(null);
-    const [userPassword, setUserPassword] = useState<string | null>(null);
+    // const [userEmail, setUserEmail] = useState<string | null>(null);
+    // const [userPassword, setUserPassword] = useState<string | null>(null);
 
     useEffect(() => {
         const loadSession = async () => {
             const session = await SecureStore.getItemAsync('session');
             if (session) {
-                setUser(JSON.parse(session));
+                setCurrentUser(JSON.parse(session));
             }
             setIsLoading(false);
         };
@@ -40,55 +39,49 @@ const AuthContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
     const signup = async (email: string, password: string) => {
         const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
-        setUser(userCredentials.user);
+        setCurrentUser(userCredentials.user);
         await SecureStore.setItemAsync('session', JSON.stringify(userCredentials.user));
         return userCredentials;
     };
 
-    // sign in
     const login = async (email: string, password: string) => {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        setUser(userCredential.user);
+        setCurrentUser(userCredential.user);
         await SecureStore.setItemAsync('session', JSON.stringify(userCredential.user));
         return userCredential;
     };
 
-    // sign out
     const logout = async () => {
         await signOut(auth);
-        setUser(null);
+        setCurrentUser(null);
         SecureStore.deleteItemAsync('session');
     };
 
+    // const setEmail = async (email: string) => {
+    //     if (!currentUser) {
+    //         throw new Error("No current admin");
+    //     }
+    //     return updateEmail(currentUser, email);
+    // };
 
-    const setEmail = async (email: string) => {
-        if (!user) {
-            throw new Error("No current admin");
-        }
-
-        return updateEmail(user, email);
-    };
-
-    const setPassword = async (password: string) => {
-        if (!user) {
-            throw new Error("No current admin");
-        }
-
-        return updatePassword(user, password);
-    };
-
+    // const setPassword = async (password: string) => {
+    //     if (!currentUser) {
+    //         throw new Error("No current admin");
+    //     }
+    //     return updatePassword(currentUser, password);
+    // };
 
     return (
         <AuthContext.Provider value={{
-            user,
+            currentUser,
             isLoading,
-            userEmail,
-            userPassword,
-            setEmail,
-            setPassword,
             signup,
             login,
-            logout
+            logout,
+            // userEmail,
+            // userPassword,
+            // setEmail,
+            // setPassword
         }}>
             {children}
         </AuthContext.Provider>
