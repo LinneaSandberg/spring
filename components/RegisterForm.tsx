@@ -135,12 +135,14 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
 
 const styles = StyleSheet.create({
     formContainer: {
+        flex: 1,
         width: '100%',
+        backgroundColor: '#F5F5F5',
     },
     input: {
-        height: 40,
+        height: 50,
         borderColor: '#ccc',
-        backgroundColor: '#F3F3F3',
+        backgroundColor: '#FFFFFF',
         borderRadius: 10,
         borderWidth: 1,
         marginBottom: 15,
