@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
-import RegisterForm from '../../components/RegisterForm';
+import RegisterForm from "@/components/RegisterForm";
 import { useAuth } from '@/hooks/useAuth';
 import { SubmitHandler } from 'react-hook-form';
 import { RegisterInfo } from '@/types/Auth.types';
