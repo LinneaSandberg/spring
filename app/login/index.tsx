@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
-import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { LoginInfo } from "@/types/Auth.types";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { useRouter } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { FirebaseError } from "firebase/app";
 
 const LoginScreen = () => {
@@ -83,6 +83,9 @@ const LoginScreen = () => {
           {isLoggingIn ? "Logging in..." : "Login"}
         </Text>
       </TouchableOpacity>
+
+      <Link style={styles.registerLink} href="/forgot">Forgot your password?</Link>
+
     </View>
   );
 };
@@ -110,10 +113,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     paddingLeft: 8,
   },
-  error: {
-    color: 'red',
-    fontSize: 12,
-  },
   button: {
     fontSize: 18,
     textAlign: 'center',
@@ -122,7 +121,7 @@ const styles = StyleSheet.create({
     borderColor: '#1E1E1E',
     borderWidth: 1,
     padding: 10,
-    borderRadius: 20,
+    borderRadius: 10,
   },
   buttonDisabled: {
     backgroundColor: '#A9A9A9',
@@ -131,6 +130,15 @@ const styles = StyleSheet.create({
     color: '#1E1E1E',
     fontSize: 16,
     textAlign: 'center',
+  },
+  registerLink: {
+    color: '#1E1E1E',
+    textAlign: 'center',
+    marginTop: 10,
+  },
+  error: {
+    color: 'red',
+    fontSize: 12,
   },
 });
 

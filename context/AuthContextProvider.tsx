@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, PropsWithChildren } from 'react';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateEmail, updatePassword, User, UserCredential } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateEmail, updatePassword, User, UserCredential } from 'firebase/auth';
 import { auth } from '../services/firebase';
 import * as SecureStore from 'expo-secure-store';
 
@@ -9,6 +9,7 @@ interface AuthContextType {
     login: (email: string, password: string) => Promise<UserCredential>;
     logout: () => Promise<void>;
     isLoading: boolean;
+    resetPassword: (email: string) => Promise<void>;
 
     // userEmail: string | null;
     // userPassword: string | null;
@@ -33,7 +34,6 @@ const AuthContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
             }
             setIsLoading(false);
         };
-
         loadSession();
     }, []);
 
@@ -57,6 +57,10 @@ const AuthContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
         SecureStore.deleteItemAsync('session');
     };
 
+    const resetPassword = (email: string) => {
+        return sendPasswordResetEmail(auth, email);
+    };
+
     // const setEmail = async (email: string) => {
     //     if (!currentUser) {
     //         throw new Error("No current admin");
@@ -78,6 +82,7 @@ const AuthContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
             signup,
             login,
             logout,
+            resetPassword,
             // userEmail,
             // userPassword,
             // setEmail,

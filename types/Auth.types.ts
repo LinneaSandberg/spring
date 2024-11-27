@@ -23,3 +23,7 @@ export type LoginInfo = {
   email: string;
   password: string;
 };
+
+export type ResetPasswordInfo = {
+  email: string;
+};
