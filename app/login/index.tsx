@@ -84,7 +84,7 @@ const LoginScreen = () => {
         </Text>
       </TouchableOpacity>
 
-      <Link style={styles.registerLink} href="/forgot">Forgot your password?</Link>
+      <Link style={styles.registerLink} href="/login/forgot">Forgot your password?</Link>
 
     </View>
   );

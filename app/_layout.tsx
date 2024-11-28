@@ -30,8 +30,11 @@ export default function RootLayout() {
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="index" />
           <Stack.Screen name="login/index" />
+          <Stack.Screen name="login/forgot" />
           <Stack.Screen name="signup/index" />
           <Stack.Screen name="home/index" />
+          <Stack.Screen name="budget/index" />
+          {/* <Stack.Screen name="budget/edit" /> */}
         </Stack>
       </ThemeProvider>
     </AuthContextProvider>

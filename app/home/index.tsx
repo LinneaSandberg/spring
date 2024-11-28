@@ -1,5 +1,6 @@
 import { useAuth } from "@/hooks/useAuth";
 import { db } from "@/services/firebase";
+import { Link } from "expo-router";
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
@@ -7,8 +8,6 @@ import { View, Text, StyleSheet } from "react-native";
 const HomeScreen = () => {
     const { currentUser: user } = useAuth();
     const [userName, setUserName] = useState<string | null>(null);
-
-
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -27,11 +26,12 @@ const HomeScreen = () => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Hello, this is your dashboard: {userName}</Text>
+
+            <Link href="/budget">
+                <Text>Go to Budget</Text>
+            </Link>
         </View>
     );
-
-
-
 };
 
 const styles = StyleSheet.create({
