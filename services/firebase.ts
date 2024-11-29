@@ -38,4 +38,8 @@ const createCollection = <T = DocumentData>(collectionName: string) => {
 export const userCol = createCollection<User>("users");
 export const registerUserCol = createCollection<CreateUser>("users");
 
+export const getUserBudgets = (userId: string) => {
+  return collection(db, "users", userId, "budgets");
+};
+
 export { auth };

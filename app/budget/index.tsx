@@ -1,12 +1,10 @@
 import BudgetForm from "@/components/BudgetForm";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 
 const BudgetScreen = () => {
-
-
     return (
         <View style={styles.container}>
-            <Text>Budget Screen</Text>
+            <Text style={styles.title}>Budget Tracker</Text>
 
             <BudgetForm />
         </View>
@@ -20,9 +18,12 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     title: {
-        fontSize: 24,
+        marginTop: 40,
+        fontSize: 28,
         marginBottom: 20,
         textAlign: 'center',
+        fontWeight: 'bold',
+        color: '#2C3E50',
     }
 });
 

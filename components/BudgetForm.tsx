@@ -1,66 +1,89 @@
 import { Text, TextInput, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, set } from 'react-hook-form';
 import { useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
+import { Months } from '@/enum/monthEnum';
+import saveMonthlyBudget from '@/services/budgetFunctions/saveMonthlyBudget';
+import { Expenses, MonthlyBudget } from '@/types/Budget.types';
 
 const BudgetForm = () => {
+    const { currentUser } = useAuth();
     const { control, handleSubmit } = useForm();
+    const [month, setMonth] = useState<Months>(Months.January);
+    const [year, setYear] = useState(new Date().getFullYear());
+    const [totalIncome, setTotalIncome] = useState<number>(0);
     const [isSubmitted, setIsSubmitted] = useState(false);
 
-    const onSubmit = (data: any) => {
-        console.log(data);
+    const [fixedExpenses, setFixedExpenses] = useState<Expenses>({
+        housingCosts: null,
+        transportation: null,
+        subscriptions: null,
+        healthAndWellness: null,
+        entertainment: null,
+    });
+
+    const onSubmit = async () => {
+        if (!currentUser) return;
+
         setIsSubmitted(true);
-        // Handle form submission logic here
+
+        const budget: MonthlyBudget = {
+            month,
+            year,
+            totalIncome,
+            fixedExpenses: [
+                { name: "Housing Costs", amount: fixedExpenses.housingCosts ?? 0 },
+                { name: "Transportation", amount: fixedExpenses.transportation ?? 0 },
+                { name: "Subscriptions", amount: fixedExpenses.subscriptions ?? 0 },
+                { name: "Health & Wellness", amount: fixedExpenses.healthAndWellness ?? 0 },
+                { name: "Entertainment", amount: fixedExpenses.entertainment ?? 0 }
+            ],
+        };
+
+        await saveMonthlyBudget(currentUser.uid, budget);
+        setIsSubmitted(false);
     };
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.heading}>Budget Tracker</Text>
-
-            <Text style={styles.subTitle}>Income</Text>
-            <Controller
-                control={control}
-                name="salary"
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Salary"
-                        placeholderTextColor="#aaa"
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                    />
-                )}
+            <TextInput
+                style={styles.input}
+                placeholder="Year"
+                keyboardType="numeric"
+                value={year.toString()}
+                onChangeText={text => setYear(parseInt(text) || new Date().getFullYear())}
             />
 
-            <Controller
-                control={control}
-                name="otherIncome"
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Other Income"
-                        placeholderTextColor="#aaa"
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                    />
-                )}
+            <Text style={styles.subTitle}>Total income</Text>
+            <TextInput
+                style={styles.input}
+                placeholder="Total Income"
+                keyboardType="numeric"
+                value={totalIncome.toString()}
+                onChangeText={text => setTotalIncome(parseFloat(text) || 0)}
             />
 
-            <Text style={styles.subTitle}>Expenses</Text>
+
+
+            <Text style={styles.subTitle}>Fixed Expenses</Text>
 
             <Text style={styles.expenseTitle}>Housing Costs</Text>
             <Controller
                 control={control}
                 name="housingCosts"
-                render={({ field: { onChange, onBlur, value } }) => (
+                render={({ field: { onChange, onBlur } }) => (
                     <TextInput
                         style={styles.input}
                         placeholder="Rent/Mortgage, Electricity, Heating"
+                        keyboardType="numeric"
                         placeholderTextColor="#aaa"
+                        value={fixedExpenses.housingCosts?.toString() ?? ""}
                         onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
+                        onChangeText={text => {
+                            const amount = text ? parseFloat(text) : null;
+                            setFixedExpenses(prev => ({ ...prev, housingCosts: amount }));
+                            onChange(amount);
+                        }}
                     />
                 )}
             />
@@ -72,11 +95,15 @@ const BudgetForm = () => {
                 render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput
                         style={styles.input}
-                        placeholder="Public transport, Gas, Car insurance"
-                        placeholderTextColor="#aaa"
+                        placeholder="Public transport, Gas"
+                        keyboardType="numeric"
+                        value={fixedExpenses.transportation?.toString() ?? ''}
                         onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
+                        onChangeText={text => {
+                            const amount = text ? parseFloat(text) : null;
+                            setFixedExpenses(prev => ({ ...prev, transportation: amount }));
+                            onChange(amount);
+                        }}
                     />
                 )}
             />
@@ -89,10 +116,15 @@ const BudgetForm = () => {
                     <TextInput
                         style={styles.input}
                         placeholder="Phone, Internet, Streaming services"
+                        keyboardType="numeric"
                         placeholderTextColor="#aaa"
+                        value={fixedExpenses.subscriptions?.toString() ?? ''}
                         onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
+                        onChangeText={text => {
+                            const amount = text ? parseFloat(text) : null;
+                            setFixedExpenses(prev => ({ ...prev, subscriptions: amount }));
+                            onChange(amount);
+                        }}
                     />
                 )}
             />
@@ -105,10 +137,15 @@ const BudgetForm = () => {
                     <TextInput
                         style={styles.input}
                         placeholder="Gym, Medical expenses"
+                        keyboardType="numeric"
                         placeholderTextColor="#aaa"
+                        value={fixedExpenses.healthAndWellness?.toString() || ''}
                         onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
+                        onChangeText={text => {
+                            const amount = text ? parseFloat(text) : null;
+                            setFixedExpenses(prev => ({ ...prev, healthAndWellness: amount }));
+                            onChange(amount);
+                        }}
                     />
                 )}
             />
@@ -121,10 +158,15 @@ const BudgetForm = () => {
                     <TextInput
                         style={styles.input}
                         placeholder="Movies, Dining out"
+                        keyboardType="numeric"
                         placeholderTextColor="#aaa"
+                        value={fixedExpenses.entertainment?.toString() || ''}
                         onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
+                        onChangeText={text => {
+                            const amount = text ? parseFloat(text) : null;
+                            setFixedExpenses(prev => ({ ...prev, entertainment: amount }));
+                            onChange(amount);
+                        }}
                     />
                 )}
             />
@@ -137,73 +179,86 @@ const BudgetForm = () => {
                     {isSubmitted ? "Submitting..." : "Submit"}
                 </Text>
             </TouchableOpacity>
-        </ScrollView>
+        </ScrollView >
     );
 };
-
-export default BudgetForm;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
         backgroundColor: '#F5F5F5',
+        padding: 20,
     },
     heading: {
         fontSize: 28,
         marginBottom: 20,
         textAlign: 'center',
         fontWeight: 'bold',
-        color: '#333',
+        color: '#2C3E50',
     },
     subTitle: {
         fontSize: 22,
         marginBottom: 10,
-        fontWeight: '600', // Semi-bold for emphasis
-        color: '#333', // Change as per theme
+        fontWeight: '600',
+        color: '#34495E',
     },
     expenseTitle: {
-        fontSize: 16,
+        fontSize: 18,
         marginVertical: 5,
         fontWeight: '500',
-        color: '#555', // A lighter shade for less emphasis
+        color: '#555',
     },
     input: {
         height: 50,
         borderColor: '#ccc',
         backgroundColor: '#FFFFFF',
-        borderRadius: 10,
+        borderRadius: 8,
         borderWidth: 1,
         marginBottom: 15,
         paddingLeft: 8,
+        paddingRight: 8,
+        fontSize: 16,
     },
     button: {
         fontSize: 18,
         textAlign: 'center',
         marginBottom: 10,
-        backgroundColor: '#FAECC4',
+        backgroundColor: '#FFD700',
         borderColor: '#1E1E1E',
         borderWidth: 1,
-        padding: 10,
-        borderRadius: 10,
+        padding: 12,
+        borderRadius: 8,
     },
     buttonDisabled: {
-        backgroundColor: '#A9A9A9', // Grey when disabled
+        backgroundColor: '#A9A9A9',
     },
     buttonText: {
         color: '#1E1E1E',
         fontSize: 16,
+        fontWeight: 'bold',
         textAlign: 'center',
     },
     error: {
-        color: 'red',
+        color: '#E74C3C',
         fontSize: 12,
         marginBottom: 10,
     },
     description: {
         fontSize: 16,
-        color: '#666', // Color for secondary text
+        color: '#666',
         textAlign: 'center',
         marginBottom: 20,
     },
+    picker: {
+        height: 50,
+        backgroundColor: '#FFFFFF',
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        marginBottom: 15,
+        paddingHorizontal: 10,
+    }
 });
+
+export default BudgetForm;
