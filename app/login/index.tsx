@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
     marginBottom: 10,
-    backgroundColor: '#FAECC4',
+    backgroundColor: '#FFD700',
     borderColor: '#1E1E1E',
     borderWidth: 1,
     padding: 10,

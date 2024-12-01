@@ -213,11 +213,10 @@ const styles = StyleSheet.create({
         height: 50,
         borderColor: '#ccc',
         backgroundColor: '#FFFFFF',
-        borderRadius: 8,
+        borderRadius: 10,
         borderWidth: 1,
         marginBottom: 15,
         paddingLeft: 8,
-        paddingRight: 8,
         fontSize: 16,
     },
     button: {
@@ -236,13 +235,11 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#1E1E1E',
         fontSize: 16,
-        fontWeight: 'bold',
         textAlign: 'center',
     },
     error: {
         color: '#E74C3C',
         fontSize: 12,
-        marginBottom: 10,
     },
     description: {
         fontSize: 16,

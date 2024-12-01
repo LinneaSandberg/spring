@@ -53,10 +53,12 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     title: {
-        fontSize: 30,
+        marginTop: 60,
+        fontSize: 28,
         marginBottom: 20,
         textAlign: 'center',
-        color: '#1E1E1E',
+        fontWeight: 'bold',
+        color: '#2C3E50',
     },
 });
 
