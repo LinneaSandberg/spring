@@ -1,11 +1,11 @@
 import { Months } from "@/enum/monthEnum";
 
 export interface Expenses {
-  housingCosts: number | null;
-  transportation: number | null;
-  subscriptions: number | null;
-  healthAndWellness: number | null;
-  entertainment: number | null;
+  housingCosts: number;
+  transportation: number;
+  subscriptions: number;
+  healthAndWellness: number;
+  entertainment: number;
 }
 
 export interface Budget {
@@ -13,6 +13,7 @@ export interface Budget {
   year: number;
   totalIncome: number;
   fixedExpenses: Expenses;
+  remaningBalance: number;
   variableExpenses: {
     planned: number;
     expenses: VariableExpense[];
