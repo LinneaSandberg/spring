@@ -33,8 +33,8 @@ export default function RootLayout() {
           <Stack.Screen name="login/forgot" />
           <Stack.Screen name="signup/index" />
           <Stack.Screen name="home/index" />
-          <Stack.Screen name="budget/index" />
-          {/* <Stack.Screen name="budget/edit" /> */}
+          <Stack.Screen name="budget/add" />
+          <Stack.Screen name="budget/edit" />
         </Stack>
       </ThemeProvider>
     </AuthContextProvider>
