@@ -1,3 +1,4 @@
+import BudgetCard from "@/components/BudgetCard";
 import { useAuth } from "@/hooks/useAuth";
 import { db } from "@/services/firebase";
 import { Link } from "expo-router";
@@ -8,6 +9,9 @@ import { View, Text, StyleSheet } from "react-native";
 const HomeScreen = () => {
     const { currentUser: user } = useAuth();
     const [userName, setUserName] = useState<string | null>(null);
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1;
+    const currentYear = currentDate.getFullYear();
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -30,6 +34,8 @@ const HomeScreen = () => {
             <Link href="/budget">
                 <Text>Go to Budget</Text>
             </Link>
+
+            <BudgetCard month={currentMonth} year={currentYear} />
         </View>
     );
 };

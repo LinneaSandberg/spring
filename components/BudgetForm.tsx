@@ -8,7 +8,7 @@ import * as Yup from "yup";
 
 const createNumberField = () => Yup.number().default(0);
 
-export const budgetSchema = Yup.object({
+const budgetSchema = Yup.object({
     month: Yup.number().required(),
     year: Yup.number().required(),
     totalIncome: Yup.number().required("You need to enter your total income"),
@@ -41,12 +41,15 @@ interface BudgetFormProps {
 
 const BudgetForm: React.FC<BudgetFormProps> = ({ initialValues, onSubmit }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1;
+    const currentYear = currentDate.getFullYear();
 
     const { control, handleSubmit, ...rest } = useForm<Budget>({
         resolver: yupResolver(budgetSchema),
         defaultValues: initialValues || {
-            month: 1,
-            year: new Date().getFullYear(),
+            month: currentMonth,
+            year: currentYear,
             totalIncome: 0,
             fixedExpenses: {
                 housingCosts: 0,
