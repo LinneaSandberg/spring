@@ -1,70 +1,12 @@
 import { Text, TextInput, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
-import React, { useEffect, useState } from 'react';
-import { useAuth } from '@/hooks/useAuth';
-import { Months } from '@/enum/monthEnum';
-import saveMonthlyBudget from '@/services/budgetFunctions/saveMonthlyBudget';
-import updateMonthlyBudget from '@/services/budgetFunctions/updateMontlyBudget';
-import { MonthlyBudget } from '@/types/Budget.types';
+import React, { useState } from 'react';
 
 interface BudgetFormProps {
-    initialBudget: MonthlyBudget | null;
-    onSubmit: (data: MonthlyBudget) => Promise<void>;
 }
 
-const BudgetForm: React.FC<BudgetFormProps> = ({ initialBudget, onSubmit }) => {
-    const { currentUser } = useAuth();
-    const { control, handleSubmit, setValue } = useForm<MonthlyBudget>({
-        defaultValues: initialBudget || {
-            month: Months.January,
-            year: new Date().getFullYear(),
-            totalIncome: 0,
-            fixedExpenses: [
-                { name: "Housing Costs", amount: 0 },
-                { name: "Transportation", amount: 0 },
-                { name: "Subscriptions", amount: 0 },
-                { name: "Health & Wellness", amount: 0 },
-                { name: "Entertainment", amount: 0 }
-            ],
-        },
-    });
+const BudgetForm: React.FC<BudgetFormProps> = ({ }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    console.log(initialBudget);
-
-    useEffect(() => {
-        if (initialBudget) {
-            Object.entries(initialBudget).forEach(([key, value]) => {
-                setValue(key as keyof MonthlyBudget, value);
-            });
-        }
-
-        console.log("initialBudget in useeffect", initialBudget);
-    }, [initialBudget, setValue]);
-
-    const onFormSubmit = async (data: MonthlyBudget) => {
-        if (!currentUser) return;
-
-        setIsSubmitting(true);
-
-
-        try {
-            if (initialBudget) {
-                await updateMonthlyBudget(currentUser.uid, `${data.year}-${data.month}`, data);
-                Alert.alert('Budget updated successfully');
-
-            } else {
-                await saveMonthlyBudget(currentUser.uid, data);
-                Alert.alert('Budget added successfully');
-            }
-        } catch (error) {
-            Alert.alert('Error', 'An error occurred while adding the budget');
-            console.error(error);
-        } finally {
-            setIsSubmitting(false);
-        }
-
-    }
 
     return (
         <ScrollView style={styles.container}>
@@ -72,7 +14,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ initialBudget, onSubmit }) => {
 
 
             <Controller
-                control={control}
+                // control={control}
                 name="totalIncome"
                 render={({ field: { onChange, value } }) => (
                     <TextInput
@@ -89,7 +31,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ initialBudget, onSubmit }) => {
             {['Housing Costs', 'Transportation', 'Subscriptions', 'Health & Wellness', 'Entertainment'].map((expenseName, index) => (
                 <Controller
                     key={expenseName}
-                    control={control}
+                    // control={control}
                     name={`fixedExpenses.${index}.amount`}
                     render={({ field: { onChange, value } }) => (
                         <>
@@ -108,7 +50,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ initialBudget, onSubmit }) => {
 
             <TouchableOpacity
                 style={[styles.button, isSubmitting && styles.buttonDisabled]}
-                onPress={handleSubmit(onFormSubmit)}
+                // onPress={handleSubmit(onFormSubmit)}
                 disabled={isSubmitting}
             >
                 <Text style={styles.buttonText}>

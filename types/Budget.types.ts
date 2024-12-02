@@ -8,15 +8,19 @@ export interface Expenses {
   entertainment: number | null;
 }
 
-interface FixedExpenses {
-  name: string;
-  amount: number;
-}
-
-export interface MonthlyBudget {
-  id: string;
+export interface Budget {
   month: Months;
   year: number;
   totalIncome: number;
-  fixedExpenses: FixedExpenses[];
+  fixedExpenses: Expenses;
+  variableExpenses: {
+    planned: number;
+    expenses: VariableExpense[];
+  };
+}
+
+interface VariableExpense {
+  date: string;
+  description: string;
+  amount: number;
 }

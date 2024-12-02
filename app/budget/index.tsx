@@ -1,31 +1,11 @@
-import BudgetForm from "@/components/BudgetForm";
 import { View, StyleSheet, Text } from "react-native";
 import { Link } from "expo-router";
-import useCurrentBudget from "@/hooks/useCurrentBudget";
-
 
 const BudgetScreen = () => {
-    const currentBudget = useCurrentBudget();
-
-    const handleSubmit = () => {
-        console.log('submit');
-    }
-
-
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Budget Tracker</Text>
 
-            {/* {currentBudget ? (
-                <BudgetForm initialBudget={currentBudget} onSubmit={} />
-            ) : (
-                <>
-                    <Text>No budget found</Text>
-                    <Link href="/budget/add">
-                        <Text>Add montly budget</Text>
-                    </Link>
-                </>
-            )} */}
             <Link href="/budget/add">
                 <Text>Add montly budget</Text>
             </Link>
