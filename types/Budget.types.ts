@@ -14,6 +14,7 @@ interface FixedExpenses {
 }
 
 export interface MonthlyBudget {
+  id: string;
   month: Months;
   year: number;
   totalIncome: number;
