@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, PropsWithChildren } from 'react';
-import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateEmail, updatePassword, User, UserCredential } from 'firebase/auth';
+import { createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateEmail, updatePassword, User, UserCredential } from 'firebase/auth';
 import { auth } from '../services/firebase';
 import * as SecureStore from 'expo-secure-store';
 
@@ -60,6 +60,14 @@ const AuthContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const resetPassword = (email: string) => {
         return sendPasswordResetEmail(auth, email);
     };
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth,
+            (user) => {
+                setCurrentUser(user);
+            });
+        return unsubscribe;
+    }, []);
 
     // const setEmail = async (email: string) => {
     //     if (!currentUser) {

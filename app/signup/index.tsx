@@ -2,33 +2,35 @@ import RegisterForm from "@/components/RegisterForm";
 import { useAuth } from '@/hooks/useAuth';
 import { SubmitHandler } from 'react-hook-form';
 import { RegisterInfo } from '@/types/Auth.types';
-import { doc, setDoc } from 'firebase/firestore';
-import { registerUserCol } from '@/services/firebase';
 import { FirebaseError } from 'firebase/app';
 import { useRouter } from 'expo-router';
+import { createUserInFirestore } from "@/services/firebaseFunctions";
 
 const RegisterScreen = () => {
-    const { signup } = useAuth();
+    const { signup, login } = useAuth();
     const router = useRouter();
 
     const handleRegistration: SubmitHandler<RegisterInfo> = async (data) => {
         try {
             const newUser = await signup(data.email, data.password);
-            const docRef = doc(registerUserCol, newUser.user.uid);
+            await createUserInFirestore(newUser.user.uid, data.email, data.name);
 
-            await setDoc(docRef, {
-                uid: newUser.user.uid,
-                email: data.email,
-                _id: docRef.id,
-                name: data.name,
-            });
-
+            await login(data.email, data.password);
             alert('User registered successfully');
-            router.push('/login');
+            router.push('/home');
 
         } catch (error) {
             if (error instanceof FirebaseError) {
-                alert(error.message);
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        alert('This email is already in use.');
+                        break;
+                    case 'auth/weak-password':
+                        alert('The password is too weak.');
+                        break;
+                    default:
+                        alert('An error occurred when registering the user.');
+                }
             } else if (error instanceof Error) {
                 alert(error.message);
             } else {
