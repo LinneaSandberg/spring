@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, TextInput, Text, StyleSheet, KeyboardTypeOptions } from 'react-native';
 import { Controller } from 'react-hook-form';
 
@@ -10,6 +10,7 @@ interface InputFieldProps {
     keyboardType?: KeyboardTypeOptions;
     secureTextEntry?: boolean;
     error?: string;
+    defaultValue?: string;
 }
 
 export const InputField: React.FC<InputFieldProps> = ({
@@ -19,23 +20,51 @@ export const InputField: React.FC<InputFieldProps> = ({
     placeholder,
     keyboardType,
     secureTextEntry,
-    error
+    error,
+    defaultValue
 }) => {
+    const [value, setValue] = useState(defaultValue || '');
+    const [isFocused, setIsFocused] = useState(false);
+
+    const handleFocus = () => {
+        setIsFocused(true);
+        if (value === '0' || value === defaultValue) {
+            setValue('');
+        }
+    };
+
+    const handleBlur = () => {
+        setIsFocused(false);
+        if (value === '') {
+            setValue(defaultValue || '');
+        }
+    };
+
     return (
         <View>
             <Text style={styles.label}>{label}</Text>
             <Controller
                 control={control}
                 name={name}
-                render={({ field: { onChange, onBlur, value } }) => (
+                render={({ field: { onChange, onBlur: onBlurField } }) => (
                     <TextInput
-                        style={styles.input}
-                        placeholder={placeholder}
+                        style={[
+                            styles.input,
+                            isFocused && styles.inputFocused
+                        ]} placeholder={placeholder}
                         keyboardType={keyboardType}
-                        onBlur={onBlur}
-                        onChangeText={onChange}
+                        onBlur={() => {
+                            handleBlur();
+                            onBlurField();
+                        }}
+                        onFocus={handleFocus}
+                        onChangeText={(text) => {
+                            setValue(text);
+                            onChange(text);
+                        }}
                         value={value}
                         secureTextEntry={secureTextEntry}
+                        defaultValue={defaultValue}
                     />
                 )}
             />
@@ -53,6 +82,9 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         marginBottom: 15,
         paddingLeft: 8,
+    },
+    inputFocused: {
+        borderColor: 'blue',
     },
     label: {
         marginBottom: 5,

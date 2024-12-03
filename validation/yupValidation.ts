@@ -27,3 +27,32 @@ export const forgotPasswordSchema = Yup.object().shape({
     .email("Invalid email format")
     .required("Email is required"),
 });
+
+const createNumberField = () => Yup.number().default(0);
+
+export const budgetSchema = Yup.object({
+  _id: Yup.string().optional(),
+  month: Yup.number().required(),
+  year: Yup.number().required(),
+  totalIncome: Yup.number().required("You need to enter your total income"),
+  fixedExpenses: Yup.object({
+    housingCosts: createNumberField(),
+    transportation: createNumberField(),
+    subscriptions: createNumberField(),
+    healthAndWellness: createNumberField(),
+    entertainment: createNumberField(),
+  }).required(),
+  remaningBalance: Yup.number().required(),
+  variableExpenses: Yup.object({
+    planned: Yup.number().required(),
+    expenses: Yup.array()
+      .of(
+        Yup.object({
+          date: Yup.string().required(),
+          description: Yup.string().required(),
+          amount: Yup.number().required(),
+        })
+      )
+      .default([]),
+  }).required(),
+}).required();

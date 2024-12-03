@@ -1,4 +1,4 @@
-import RegisterForm from "@/components/RegisterForm";
+import RegisterForm from "@/components/forms/RegisterForm";
 import { useAuth } from '@/hooks/useAuth';
 import { SubmitHandler } from 'react-hook-form';
 import { RegisterInfo } from '@/types/Auth.types';

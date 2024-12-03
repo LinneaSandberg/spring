@@ -1,4 +1,4 @@
-import BudgetForm from "@/components/BudgetForm";
+import BudgetForm from "@/components/forms/BudgetForm";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { useAuth } from "@/hooks/useAuth";
 import useBudget from "@/hooks/useBudget";

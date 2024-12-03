@@ -3,8 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { RegisterInfo } from '@/types/Auth.types';
-import LoadingSpinner from './LoadingSpinner';
-import { InputField } from './InputField';
+import LoadingSpinner from '../LoadingSpinner';
+import { InputField } from '../InputField';
 import { registrationSchema } from '@/validation/yupValidation';
 
 interface RegisterFormProps {

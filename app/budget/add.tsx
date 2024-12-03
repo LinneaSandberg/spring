@@ -1,4 +1,4 @@
-import BudgetForm from "@/components/BudgetForm";
+import BudgetForm from "@/components/forms/BudgetForm";
 import { useAuth } from "@/hooks/useAuth";
 import { db } from "@/services/firebase";
 import { Budget } from "@/types/Budget.types";
