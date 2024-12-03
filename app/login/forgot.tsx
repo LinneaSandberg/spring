@@ -2,27 +2,22 @@ import { useAuth } from "@/hooks/useAuth";
 import { ResetPasswordInfo } from "@/types/Auth.types";
 import { FirebaseError } from "firebase/app";
 import { useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
 import { useRouter } from 'expo-router';
+import { forgotPasswordSchema } from "@/validation/yupValidation";
+import { InputField } from "@/components/InputField";
 
-const registrationSchema = Yup.object().shape({
-    email: Yup.string()
-        .email('Invalid email format')
-        .required('Email is required'),
-});
-
-const ForgotScreen = () => {
+const ForgotPasswordScreen = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [resetPasswordSubmit, setResetPasswordSubmit] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
     const {
         control,
         handleSubmit,
         formState: { errors }
     } = useForm<ResetPasswordInfo>({
-        resolver: yupResolver(registrationSchema)
+        resolver: yupResolver(forgotPasswordSchema)
     });
     const { resetPassword } = useAuth();
     const router = useRouter();
@@ -32,13 +27,20 @@ const ForgotScreen = () => {
 
         try {
             await resetPassword(data.email);
-            setResetPasswordSubmit(true);
-            router.push('/login');
-            Alert.alert('Success', 'Password reset email sent.');
+            setIsSuccess(true);
+            setTimeout(() => {
+                router.push('/login');
+            }, 2000);
 
         } catch (error) {
             if (error instanceof FirebaseError) {
-                alert(error.message);
+                switch (error.code) {
+                    case "auth/user-not-found":
+                        alert("User not found.");
+                        break;
+                    default:
+                        alert("An error occurred.");
+                }
             } else if (error instanceof Error) {
                 alert(error.message);
             } else {
@@ -52,21 +54,14 @@ const ForgotScreen = () => {
         <View style={styles.formContainer}>
             <Text style={styles.title}>Forgot Password</Text>
 
-            <Controller
+            <InputField
                 control={control}
                 name="email"
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Email"
-                        placeholderTextColor="#aaa"
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                    />
-                )}
+                label="Email"
+                placeholder="Enter your email"
+                keyboardType="email-address"
+                error={errors.email?.message}
             />
-            {errors.email && <Text style={styles.error}>{errors.email.message}</Text>}
 
             <TouchableOpacity
                 style={[styles.button, isSubmitting && styles.buttonDisabled]}
@@ -80,6 +75,12 @@ const ForgotScreen = () => {
                     }
                 </Text>
             </TouchableOpacity>
+
+            {isSuccess && (
+                <Text style={styles.successMessage}>
+                    We have sent you an email with instructions to reset your password.
+                </Text>
+            )}
         </View>
     );
 };
@@ -97,15 +98,6 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         textAlign: 'center',
         color: '#1E1E1E',
-    },
-    input: {
-        height: 40,
-        borderColor: '#ccc',
-        backgroundColor: '#F3F3F3',
-        borderRadius: 10,
-        borderWidth: 1,
-        marginBottom: 15,
-        paddingLeft: 8,
     },
     button: {
         fontSize: 18,
@@ -125,10 +117,11 @@ const styles = StyleSheet.create({
         fontSize: 16,
         textAlign: 'center',
     },
-    error: {
-        color: 'red',
-        marginBottom: 12,
-    },
+    successMessage: {
+        color: 'green',
+        textAlign: 'center',
+        marginTop: 20,
+    }
 });
 
-export default ForgotScreen;
+export default ForgotPasswordScreen;
