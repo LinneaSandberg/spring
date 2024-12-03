@@ -1,6 +1,6 @@
 import { Text, TextInput, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
-import React, { useState } from 'react';
+import { useForm, Controller, SubmitHandler } from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
 import { Budget } from '@/types/Budget.types';
 import { useRouter } from "expo-router";
 import * as Yup from "yup";
@@ -46,7 +46,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ initialValues, onSubmit }) => {
     const currentMonth = currentDate.getMonth() + 1;
     const currentYear = currentDate.getFullYear();
 
-    const { control, handleSubmit, ...rest } = useForm<Budget>({
+    const { control, handleSubmit, reset, ...rest } = useForm<Budget>({
         resolver: yupResolver(budgetSchema),
         defaultValues: initialValues || {
             month: currentMonth,
@@ -68,25 +68,26 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ initialValues, onSubmit }) => {
     });
     const router = useRouter();
 
-
-    const onSubmitForm = async (data: Budget) => {
-        setIsSubmitting(true);
-
+    const onSubmitForm: SubmitHandler<Budget> = async (data) => {
         try {
-            const sumOfFixedExpenses = Object.values(data.fixedExpenses).reduce((sum, cost) => sum + (cost || 0), 0);
-            const remainingBalance = data.totalIncome - sumOfFixedExpenses;
-            await onSubmit({ ...data, remaningBalance: remainingBalance });
-            Alert.alert('Success!', 'Budget saved successfully!');
-            router.push('/budget');
+            setIsSubmitting(true);
+            await onSubmit(data);
+            setTimeout(() => router.replace('/budget'), 2000);
 
         } catch (error) {
-            Alert.alert('Error!', 'Failed to save budget. Please try again.');
-            console.error("Error submitting budget:", error);
-
+            if (error instanceof Error) {
+                Alert.alert('Error!', error.message);
+            } else {
+                Alert.alert('Error!', 'Failed to save budget. Please try again.');
+            }
         } finally {
             setIsSubmitting(false);
         }
     };
+
+    useEffect(() => {
+        reset(initialValues);
+    }, [initialValues, isSubmitting, reset]);
 
     return (
         <ScrollView style={styles.container}>
@@ -109,8 +110,6 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ initialValues, onSubmit }) => {
             />
 
             <Text style={styles.subTitle}>Fixed Expenses</Text>
-
-
             <Controller
                 control={control}
                 name="fixedExpenses.housingCosts"
@@ -200,7 +199,6 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ initialValues, onSubmit }) => {
                     </>
                 )}
             />
-
 
             <TouchableOpacity
                 style={[styles.button, isSubmitting && styles.buttonDisabled]}

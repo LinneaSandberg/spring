@@ -3,6 +3,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
 import { Budget } from "@/types/Budget.types";
 import { db } from "@/services/firebase";
+import { Alert } from "react-native";
 
 const useBudget = (month: number, year: number) => {
   const { currentUser } = useAuth();
@@ -15,11 +16,11 @@ const useBudget = (month: number, year: number) => {
       setLoading(true);
       setError(null);
 
-      try {
-        if (!currentUser) {
-          throw new Error("User is not authenticated");
-        }
+      if (!currentUser) {
+        throw new Error("User is not authenticated");
+      }
 
+      try {
         const q = query(
           collection(db, `users/${currentUser.uid}/budgets`),
           where("month", "==", month),
@@ -30,10 +31,17 @@ const useBudget = (month: number, year: number) => {
         if (querySnapshot.empty) {
           setBudget(null);
         } else {
-          setBudget(querySnapshot.docs[0].data() as Budget);
+          const budgetDoc = querySnapshot.docs[0];
+          const budgetData = budgetDoc.data() as Budget;
+          budgetData._id = budgetDoc.id;
+          setBudget(budgetData);
         }
       } catch (error) {
-        setError(error as Error);
+        if (error instanceof Error) {
+          Alert.alert("Error", error.message);
+        } else {
+          Alert.alert("Error", "Failed to fetch budget data");
+        }
       } finally {
         setLoading(false);
       }

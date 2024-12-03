@@ -10,12 +10,9 @@ const BudgetScreen = () => {
     const [budgetExists, setBudgetExists] = useState(false);
     const { budget, loading } = useBudget(currentMonth, currentYear);
 
-    console.log("budget in /budget", budget);
-
     useEffect(() => {
         if (budget) {
             setBudgetExists(true);
-
         }
     }, [budget]);
 
