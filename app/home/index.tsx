@@ -4,7 +4,7 @@ import { db } from "@/services/firebase";
 import { Link } from "expo-router";
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 
 const HomeScreen = () => {
     const { currentUser: user } = useAuth();
@@ -29,13 +29,15 @@ const HomeScreen = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Hello, this is your dashboard: {userName}</Text>
+            <Text style={styles.title}>Hello, {userName}</Text>
 
-            <Link href="/budget">
-                <Text>Go to Budget</Text>
+            <Link href="/budget" style={styles.link}>
+                <Text style={styles.buttonText}>Go to Budget</Text>
             </Link>
 
-            <BudgetCard month={currentMonth} year={currentYear} />
+            <ScrollView style={styles.scrollView}>
+                <BudgetCard month={currentMonth} year={currentYear} />
+            </ScrollView>
         </View>
     );
 };
@@ -43,24 +45,34 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        alignContent: 'center',
         justifyContent: 'center',
         padding: 20,
+        boxSizing: 'border-box',
     },
     title: {
-        fontSize: 24,
+        fontSize: 30,
         marginBottom: 20,
         textAlign: 'center',
+        color: '#1E1E1E',
     },
-    input: {
-        height: 40,
-        borderColor: '#ccc',
+    link: {
+        textAlign: 'center',
+        marginBottom: 10,
+        backgroundColor: '#FFD700',
+        borderColor: '#1E1E1E',
         borderWidth: 1,
-        marginBottom: 15,
-        paddingLeft: 8,
+        padding: 10,
+        borderRadius: 10,
     },
-    error: {
-        color: 'red',
-        fontSize: 12,
+    buttonText: {
+        color: '#1E1E1E',
+        fontSize: 18,
+        textAlign: 'center',
+    },
+    scrollView: {
+        marginTop: 10,
+        maxHeight: '70%',
     },
 });
 

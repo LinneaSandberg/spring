@@ -1,9 +1,10 @@
 import React, { useRef, useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, TextInput, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { RegisterInfo } from '@/types/Auth.types';
+import LoadingSpinner from './LoadingSpinner';
 
 interface RegisterFormProps {
     onRegister: SubmitHandler<RegisterInfo>;
@@ -51,7 +52,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
     };
 
     return (
-        <View style={styles.formContainer}>
+        <View style={styles.container}>
+            <Text style={styles.title}>Register an account</Text>
+
             <Controller
                 control={control}
                 name="name"
@@ -66,7 +69,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
                     />
                 )}
             />
-            {errors.name && <Text style={styles.error}>{errors.name.message}</Text>}
+            {errors.name && <Text style={[styles.error, styles.errorMargin]}>{errors.name.message}</Text>}
 
             <Controller
                 control={control}
@@ -82,7 +85,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
                     />
                 )}
             />
-            {errors.email && <Text style={styles.error}>{errors.email.message}</Text>}
+            {errors.email && <Text style={[styles.error, styles.errorMargin]}>{errors.email.message}</Text>}
 
             <Controller
                 control={control}
@@ -99,7 +102,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
                     />
                 )}
             />
-            {errors.password && <Text style={styles.error}>{errors.password.message}</Text>}
+            {errors.password && <Text style={[styles.error, styles.errorMargin]}>{errors.password.message}</Text>}
 
             <Controller
                 control={control}
@@ -116,7 +119,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
                     />
                 )}
             />
-            {errors.confirmPassword && <Text style={styles.error}>{errors.confirmPassword.message}</Text>}
+            {errors.confirmPassword && <Text style={[styles.error, styles.errorMargin]}>{errors.confirmPassword.message}</Text>}
 
             <TouchableOpacity
                 style={[styles.button, isRegistering && styles.buttonDisabled]}
@@ -128,33 +131,35 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
                 </Text>
             </TouchableOpacity>
 
-            {isRegistering && <ActivityIndicator size={24} color="blue" />}
+            {isRegistering && <LoadingSpinner />}
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    formContainer: {
+    container: {
         flex: 1,
-        width: '100%',
-        backgroundColor: '#F5F5F5',
+        alignContent: 'center',
+        justifyContent: 'center',
         padding: 20,
+        boxSizing: 'border-box',
+    },
+    title: {
+        fontSize: 30,
+        marginBottom: 20,
+        textAlign: 'center',
+        color: '#1E1E1E',
     },
     input: {
-        height: 50,
+        height: 40,
         borderColor: '#ccc',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#F3F3F3',
         borderRadius: 10,
         borderWidth: 1,
         marginBottom: 15,
         paddingLeft: 8,
     },
-    error: {
-        color: 'red',
-        fontSize: 12,
-    },
     button: {
-        fontSize: 18,
         textAlign: 'center',
         marginBottom: 10,
         backgroundColor: '#FFD700',
@@ -168,8 +173,19 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: '#1E1E1E',
-        fontSize: 16,
+        fontSize: 18,
         textAlign: 'center',
+    },
+    error: {
+        color: 'red',
+        fontSize: 12,
+    },
+    errorMargin: {
+        marginBottom: 20,
+        marginTop: -10,
+        marginLeft: 8,
+        textAlign: 'left',
+        fontWeight: 'bold',
     },
 });
 

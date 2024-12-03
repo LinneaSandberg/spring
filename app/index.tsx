@@ -6,17 +6,15 @@ const LandingPage = () => {
     return (
         <ImageBackground source={require('../assets/images/grass.jpg')} style={styles.backgroundImage}>
             <View style={styles.container}>
-                <View style={styles.titleContainer}>
+                <View>
                     <Text style={styles.title}>SPRING</Text>
                     <Text style={styles.description}>
                         Bring spring to your economy
                     </Text>
                 </View>
-
-
-                <View style={styles.buttonCon}>
-                    <Link style={styles.bigLink} href="/login">Login</Link>
-                    <Link style={styles.registerLink} href="/signup">Don´t already have an account register here!</Link>
+                <View>
+                    <Link style={styles.loginLink} href="/login">Login</Link>
+                    <Link style={styles.signupLink} href="/signup">Register an account</Link>
                 </View>
             </View>
         </ImageBackground>
@@ -41,16 +39,34 @@ const styles = StyleSheet.create({
         color: '#FFD700',
     },
     description: {
-        fontSize: 16,
+        fontSize: 26,
         marginBottom: 40,
         textAlign: 'center',
-        color: '#1E1E1E',
+        color: '#FFFFF2',
     },
-    bigLink: {
-        fontSize: 18,
+    loginLink: {
+        fontSize: 22,
+        fontWeight: 'semibold',
         textAlign: 'center',
         marginBottom: 10,
         backgroundColor: '#FFD700',
+        // borderColor: '#1E1E1E',
+        // borderWidth: 1,
+        padding: 20,
+        borderRadius: 10,
+    },
+    button: {
+        backgroundColor: '#FFD700',
+        padding: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    signupLink: {
+        fontSize: 18,
+        textAlign: 'center',
+        marginBottom: 10,
+        backgroundColor: '#d64c0e',
         borderColor: '#1E1E1E',
         borderWidth: 1,
         padding: 10,
@@ -66,11 +82,6 @@ const styles = StyleSheet.create({
         flex: 1,
         resizeMode: 'cover',
         justifyContent: 'center',
-    },
-    buttonCon: {
-    },
-    titleContainer: {
-
     }
 });
 

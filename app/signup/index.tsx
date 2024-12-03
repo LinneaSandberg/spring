@@ -1,4 +1,3 @@
-import { View, Text, StyleSheet } from 'react-native';
 import RegisterForm from "@/components/RegisterForm";
 import { useAuth } from '@/hooks/useAuth';
 import { SubmitHandler } from 'react-hook-form';
@@ -37,29 +36,7 @@ const RegisterScreen = () => {
             }
         }
     }
-
-    return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Register an account</Text>
-            <RegisterForm onRegister={handleRegistration} />
-        </View>
-    );
+    return <RegisterForm onRegister={handleRegistration} />;
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        padding: 20,
-    },
-    title: {
-        marginTop: 60,
-        fontSize: 28,
-        marginBottom: 20,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        color: '#2C3E50',
-    },
-});
 
 export default RegisterScreen;

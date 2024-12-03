@@ -1,6 +1,6 @@
-import { Text, TextInput, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { Text, TextInput, StyleSheet, TouchableOpacity, Alert, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Budget } from '@/types/Budget.types';
 import { useRouter } from "expo-router";
 import * as Yup from "yup";
@@ -85,207 +85,190 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ initialValues, onSubmit }) => {
         }
     };
 
-    // useEffect(() => {
-    //     reset(initialValues);
-    // }, [initialValues, isSubmitting, reset]);
-
     return (
-        <ScrollView style={styles.container}>
-            <Text style={styles.heading}>Budget Tracker</Text>
-
-            <Text style={styles.subTitle}>Total income</Text>
-            <Controller
-                control={control}
-                name="totalIncome"
-                render={({ field: { onChange, value, ...rest } }) => (
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Total Income"
-                        keyboardType="numeric"
-                        value={value?.toString() || ''}
-                        onChangeText={text => onChange(parseFloat(text) || 0)}
-                        {...rest}
-                    />
-                )}
-            />
-
-            <Text style={styles.subTitle}>Fixed Expenses</Text>
-            <Controller
-                control={control}
-                name="fixedExpenses.housingCosts"
-                render={({ field: { onChange, value, ...rest } }) => (
-                    <>
-                        <Text style={styles.expenseTitle}>Housing Costs</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Housing Costs"
-                            keyboardType="numeric"
-                            value={value?.toString() || ''}
-                            onChangeText={text => onChange(parseFloat(text) || 0)}
-                            {...rest}
-                        />
-                    </>
-                )}
-            />
-
-            <Controller
-                control={control}
-                name="fixedExpenses.transportation"
-                render={({ field: { onChange, value, ...rest } }) => (
-                    <>
-                        <Text style={styles.expenseTitle}>Transportation</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Transportation"
-                            keyboardType="numeric"
-                            value={value?.toString() || ''}
-                            onChangeText={text => onChange(parseFloat(text) || 0)}
-                            {...rest}
-                        />
-                    </>
-                )}
-            />
-
-            <Controller
-                control={control}
-                name="fixedExpenses.subscriptions"
-                render={({ field: { onChange, value, ...rest } }) => (
-                    <>
-                        <Text style={styles.expenseTitle}>Subscriptions</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Subscriptions"
-                            keyboardType="numeric"
-                            value={value?.toString() || ''}
-                            onChangeText={text => onChange(parseFloat(text) || 0)}
-                            {...rest}
-                        />
-                    </>
-                )}
-            />
-
-            <Controller
-                control={control}
-                name="fixedExpenses.healthAndWellness"
-                render={({ field: { onChange, value, ...rest } }) => (
-                    <>
-                        <Text style={styles.expenseTitle}>Health & Wellness</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Health & Wellness"
-                            keyboardType="numeric"
-                            value={value?.toString() || ''}
-                            onChangeText={text => onChange(parseFloat(text) || 0)}
-                            {...rest}
-                        />
-                    </>
-                )}
-            />
-
-            <Controller
-                control={control}
-                name="fixedExpenses.entertainment"
-                render={({ field: { onChange, value, ...rest } }) => (
-                    <>
-                        <Text style={styles.expenseTitle}>Entertainment</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Entertainment"
-                            keyboardType="numeric"
-                            value={value?.toString() || ''}
-                            onChangeText={text => onChange(parseFloat(text) || 0)}
-                            {...rest}
-                        />
-                    </>
-                )}
-            />
-
-            <TouchableOpacity
-                style={[styles.button, isSubmitting && styles.buttonDisabled]}
-                onPress={handleSubmit(onSubmitForm)}
-                disabled={isSubmitting}
+        <KeyboardAvoidingView style={styles.container} behavior="padding">
+            <ScrollView
+                style={{ flex: 1 }}
+                keyboardShouldPersistTaps="handled"
+                contentContainerStyle={{ padding: 20 }}
             >
-                <Text style={styles.buttonText}>
-                    {isSubmitting ? "Submitting..." : "Submit"}
-                </Text>
-            </TouchableOpacity>
-        </ScrollView >
+                <Text style={styles.title}>Budget Tracker</Text>
+
+                <Text style={styles.subTitle}>Total income</Text>
+                <Controller
+                    control={control}
+                    name="totalIncome"
+                    render={({ field: { onChange, value, ...rest } }) => (
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Total Income"
+                            keyboardType="numeric"
+                            value={value?.toString() || ''}
+                            onChangeText={text => onChange(parseFloat(text) || 0)}
+                            {...rest}
+                        />
+                    )}
+                />
+
+                <Text style={styles.subTitle}>Fixed Expenses</Text>
+                <Controller
+                    control={control}
+                    name="fixedExpenses.housingCosts"
+                    render={({ field: { onChange, value, ...rest } }) => (
+                        <>
+                            <Text style={styles.expenseTitle}>Housing Costs</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Housing Costs"
+                                keyboardType="numeric"
+                                value={value?.toString() || ''}
+                                onChangeText={text => onChange(parseFloat(text) || 0)}
+                                {...rest}
+                            />
+                        </>
+                    )}
+                />
+
+                <Controller
+                    control={control}
+                    name="fixedExpenses.transportation"
+                    render={({ field: { onChange, value, ...rest } }) => (
+                        <>
+                            <Text style={styles.expenseTitle}>Transportation</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Transportation"
+                                keyboardType="numeric"
+                                value={value?.toString() || ''}
+                                onChangeText={text => onChange(parseFloat(text) || 0)}
+                                {...rest}
+                            />
+                        </>
+                    )}
+                />
+
+                <Controller
+                    control={control}
+                    name="fixedExpenses.subscriptions"
+                    render={({ field: { onChange, value, ...rest } }) => (
+                        <>
+                            <Text style={styles.expenseTitle}>Subscriptions</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Subscriptions"
+                                keyboardType="numeric"
+                                value={value?.toString() || ''}
+                                onChangeText={text => onChange(parseFloat(text) || 0)}
+                                {...rest}
+                            />
+                        </>
+                    )}
+                />
+
+                <Controller
+                    control={control}
+                    name="fixedExpenses.healthAndWellness"
+                    render={({ field: { onChange, value, ...rest } }) => (
+                        <>
+                            <Text style={styles.expenseTitle}>Health & Wellness</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Health & Wellness"
+                                keyboardType="numeric"
+                                value={value?.toString() || ''}
+                                onChangeText={text => onChange(parseFloat(text) || 0)}
+                                {...rest}
+                            />
+                        </>
+                    )}
+                />
+
+                <Controller
+                    control={control}
+                    name="fixedExpenses.entertainment"
+                    render={({ field: { onChange, value, ...rest } }) => (
+                        <>
+                            <Text style={styles.expenseTitle}>Entertainment</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Entertainment"
+                                keyboardType="numeric"
+                                value={value?.toString() || ''}
+                                onChangeText={text => onChange(parseFloat(text) || 0)}
+                                {...rest}
+                            />
+                        </>
+                    )}
+                />
+
+                <TouchableOpacity
+                    style={[styles.button, isSubmitting && styles.buttonDisabled]}
+                    onPress={handleSubmit(onSubmitForm)}
+                    disabled={isSubmitting}
+                >
+                    <Text style={styles.buttonText}>
+                        {isSubmitting ? "Submitting..." : "Submit"}
+                    </Text>
+                </TouchableOpacity>
+            </ScrollView>
+        </KeyboardAvoidingView >
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F5F5F5',
+        alignContent: 'center',
+        justifyContent: 'center',
         padding: 20,
-        marginTop: 60,
+        boxSizing: 'border-box',
     },
-    heading: {
-        fontSize: 28,
-        marginBottom: 20,
+    title: {
+        fontSize: 30,
+        marginTop: 60,
+        marginBottom: 40,
         textAlign: 'center',
-        fontWeight: 'bold',
-        color: '#2C3E50',
+        color: '#1E1E1E',
     },
     subTitle: {
-        fontSize: 22,
+        fontSize: 20,
         marginBottom: 10,
         fontWeight: '600',
-        color: '#34495E',
+        color: '#1E1E1E',
     },
     expenseTitle: {
-        fontSize: 18,
+        fontSize: 16,
         marginVertical: 5,
-        fontWeight: '500',
-        color: '#555',
+        fontWeight: '400',
+        color: '#1E1E1E',
     },
     input: {
-        height: 50,
+        height: 40,
         borderColor: '#ccc',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#F3F3F3',
         borderRadius: 10,
         borderWidth: 1,
         marginBottom: 15,
         paddingLeft: 8,
-        fontSize: 16,
     },
     button: {
-        fontSize: 18,
+        marginTop: 20,
         textAlign: 'center',
         marginBottom: 10,
         backgroundColor: '#FFD700',
         borderColor: '#1E1E1E',
         borderWidth: 1,
-        padding: 12,
-        borderRadius: 8,
+        padding: 10,
+        borderRadius: 10,
     },
     buttonDisabled: {
         backgroundColor: '#A9A9A9',
     },
     buttonText: {
         color: '#1E1E1E',
-        fontSize: 16,
+        fontSize: 18,
         textAlign: 'center',
     },
-    error: {
-        color: '#E74C3C',
-        fontSize: 12,
-    },
-    description: {
-        fontSize: 16,
-        color: '#666',
-        textAlign: 'center',
-        marginBottom: 20,
-    },
-    picker: {
-        height: 50,
-        backgroundColor: '#FFFFFF',
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: '#ccc',
-        marginBottom: 15,
-        paddingHorizontal: 10,
-    }
 });
 
 export default BudgetForm;

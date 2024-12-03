@@ -1,4 +1,5 @@
 import BudgetForm from "@/components/BudgetForm";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { useAuth } from "@/hooks/useAuth";
 import useBudget from "@/hooks/useBudget";
 import { db } from "@/services/firebase";
@@ -40,9 +41,7 @@ const EditBudgetScreen = () => {
         }
     };
 
-    if (budgetLoading) {
-        return <Text>Loading...</Text>;
-    }
+    if (budgetLoading) return <LoadingSpinner />;
 
     if (budgetError) {
         return <Text>Error: {budgetError.message}</Text>;

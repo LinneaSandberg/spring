@@ -32,9 +32,9 @@ const LoginScreen = () => {
       } else {
         alert("An error occurred");
       }
+    } finally {
+      setIsLoggingIn(false);
     }
-
-    setIsLoggingIn(false);
   };
 
   return (
@@ -55,7 +55,7 @@ const LoginScreen = () => {
           />
         )}
       />
-      {errors.email && <Text style={styles.error}>{errors.email.message}</Text>}
+      {errors.email && <Text style={[styles.error, styles.errorMargin]}>{errors.email.message}</Text>}
 
       <Controller
         control={control}
@@ -72,7 +72,7 @@ const LoginScreen = () => {
           />
         )}
       />
-      {errors.password && <Text style={styles.error}>{errors.password.message}</Text>}
+      {errors.password && <Text style={[styles.error, styles.errorMargin]}>{errors.password.message}</Text>}
 
       <TouchableOpacity
         style={[styles.button, isLoggingIn && styles.buttonDisabled]}
@@ -114,7 +114,6 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
   },
   button: {
-    fontSize: 18,
     textAlign: 'center',
     marginBottom: 10,
     backgroundColor: '#FFD700',
@@ -128,7 +127,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#1E1E1E',
-    fontSize: 16,
+    fontSize: 18,
     textAlign: 'center',
   },
   registerLink: {
@@ -140,7 +139,13 @@ const styles = StyleSheet.create({
     color: 'red',
     fontSize: 12,
   },
+  errorMargin: {
+    marginBottom: 20,
+    marginTop: -10,
+    marginLeft: 8,
+    textAlign: 'left',
+    fontWeight: 'bold',
+  },
 });
-
 
 export default LoginScreen;

@@ -1,7 +1,9 @@
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Link } from 'expo-router';
 import { useState, useEffect } from 'react';
 import useBudget from '@/hooks/useBudget';
+import LoadingSpinner from '@/components/LoadingSpinner';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const BudgetScreen = () => {
     const currentDate = new Date();
@@ -17,26 +19,22 @@ const BudgetScreen = () => {
     }, [budget]);
 
     if (loading) {
-        return (
-            <View style={styles.container}>
-                <ActivityIndicator size="large" color="#0000ff" />
-                <Text style={{ marginTop: 20, textAlign: "center" }}>Loading...</Text>
-            </View>
-        )
+        return <LoadingSpinner />;
     }
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Budget Tracker</Text>
+            <Text style={styles.title}>Budget planner</Text>
 
             {budgetExists ? (
                 <Link href={`/budget/edit?month=${currentMonth}&year=${currentYear}`}>
-                    <Text>Update current budget</Text>
+                    <MaterialIcons name="edit" size={20} />
+                    Update current budget
                 </Link>
             ) : (
                 <Link href={"/budget/add"}>
-                    <Text>Create a budget for {new Date().toLocaleString('default', { month: 'long' })}</Text>
-                </Link>
+                    <MaterialIcons name="add" size={20} />
+                    Create a budget for {new Date().toLocaleString('default', { month: 'long' })}                    </Link>
             )}
         </View>
     )
@@ -46,6 +44,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
+        alignItems: 'center',
         padding: 20,
     },
     title: {
@@ -55,7 +54,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold',
         color: '#2C3E50',
-    }
+    },
 });
 
 export default BudgetScreen;
