@@ -9,6 +9,7 @@ export interface Expenses {
 }
 
 export interface Budget {
+  _id?: string;
   month: Months;
   year: number;
   totalIncome: number;

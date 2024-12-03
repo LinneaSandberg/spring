@@ -3,12 +3,13 @@ import { useForm, Controller } from 'react-hook-form';
 import React, { useState } from 'react';
 import { Budget } from '@/types/Budget.types';
 import { useRouter } from "expo-router";
-import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from "yup";
+import { yupResolver } from '@hookform/resolvers/yup';
 
 const createNumberField = () => Yup.number().default(0);
 
 const budgetSchema = Yup.object({
+    _id: Yup.string().optional(),
     month: Yup.number().required(),
     year: Yup.number().required(),
     totalIncome: Yup.number().required("You need to enter your total income"),
@@ -72,14 +73,11 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ initialValues, onSubmit }) => {
         setIsSubmitting(true);
 
         try {
-
             const sumOfFixedExpenses = Object.values(data.fixedExpenses).reduce((sum, cost) => sum + (cost || 0), 0);
             const remainingBalance = data.totalIncome - sumOfFixedExpenses;
-
-            console.log("Remaining balance:", remainingBalance);
             await onSubmit({ ...data, remaningBalance: remainingBalance });
-            router.push('/home');
-            Alert.alert('Budget saved successfully');
+            Alert.alert('Success!', 'Budget saved successfully!');
+            router.push('/budget');
 
         } catch (error) {
             Alert.alert('Error!', 'Failed to save budget. Please try again.');
