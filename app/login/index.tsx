@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { LoginInfo } from "@/types/Auth.types";
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { Link, useRouter } from "expo-router";
 import { FirebaseError } from "firebase/app";
+import { loginSchema } from "@/validation/yupValidation";
+import { InputField } from "@/components/InputField";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const LoginScreen = () => {
   const { login } = useAuth();
@@ -13,7 +16,9 @@ const LoginScreen = () => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginInfo>();
+  } = useForm<LoginInfo>({
+    resolver: yupResolver(loginSchema),
+  });
   const router = useRouter();
 
   const onLogin: SubmitHandler<LoginInfo> = async (data) => {
@@ -26,7 +31,16 @@ const LoginScreen = () => {
 
     } catch (error) {
       if (error instanceof FirebaseError) {
-        alert(error.message);
+        switch (error.code) {
+          case "auth/user-not-found":
+            alert("User not found.");
+            break;
+          case "auth/wrong-password":
+            alert("Wrong password.");
+            break;
+          default:
+            alert("An error occurred when logging in.");
+        }
       } else if (error instanceof Error) {
         alert(error.message);
       } else {
@@ -41,38 +55,23 @@ const LoginScreen = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
 
-      <Controller
+      <InputField
         control={control}
         name="email"
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            placeholderTextColor="#aaa"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-          />
-        )}
+        label="Email"
+        placeholder="Enter your email"
+        keyboardType="email-address"
+        error={errors.email?.message}
       />
-      {errors.email && <Text style={[styles.error, styles.errorMargin]}>{errors.email.message}</Text>}
 
-      <Controller
+      <InputField
         control={control}
         name="password"
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            placeholderTextColor="#aaa"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            secureTextEntry
-          />
-        )}
+        label="Password"
+        placeholder="Enter your password"
+        secureTextEntry
+        error={errors.password?.message}
       />
-      {errors.password && <Text style={[styles.error, styles.errorMargin]}>{errors.password.message}</Text>}
 
       <TouchableOpacity
         style={[styles.button, isLoggingIn && styles.buttonDisabled]}
@@ -84,7 +83,9 @@ const LoginScreen = () => {
         </Text>
       </TouchableOpacity>
 
-      <Link style={styles.registerLink} href="/login/forgot">Forgot your password?</Link>
+      <Link style={styles.registerLink} href="/login/forgot">
+        Forgot your password?
+      </Link>
 
     </View>
   );
@@ -103,15 +104,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
     color: '#1E1E1E',
-  },
-  input: {
-    height: 40,
-    borderColor: '#ccc',
-    backgroundColor: '#F3F3F3',
-    borderRadius: 10,
-    borderWidth: 1,
-    marginBottom: 15,
-    paddingLeft: 8,
   },
   button: {
     textAlign: 'center',
@@ -134,18 +126,7 @@ const styles = StyleSheet.create({
     color: '#1E1E1E',
     textAlign: 'center',
     marginTop: 10,
-  },
-  error: {
-    color: 'red',
-    fontSize: 12,
-  },
-  errorMargin: {
-    marginBottom: 20,
-    marginTop: -10,
-    marginLeft: 8,
-    textAlign: 'left',
-    fontWeight: 'bold',
-  },
+  }
 });
 
 export default LoginScreen;
