@@ -2,6 +2,7 @@ import useBudget from "@/hooks/useBudget";
 import { View, Text, StyleSheet } from "react-native";
 import LoadingSpinner from "./LoadingSpinner";
 import { MaterialIcons } from '@expo/vector-icons';
+import { Expenses, VariableExpense } from "@/types/Budget.types";
 
 const BudgetCard = ({ month, year }: { month: number, year: number }) => {
     const { budget, loading, error } = useBudget(month, year);
@@ -18,6 +19,27 @@ const BudgetCard = ({ month, year }: { month: number, year: number }) => {
         return <Text style={styles.emptyText}>No budget found for this month.</Text>;
     }
 
+    const renderExpenses = (expenses: Expenses) => {
+        return Object.entries(expenses).map(([key, value]) => (
+            <View key={key} style={styles.expenseItem}>
+                <MaterialIcons name="attach-money" size={20} color="black" />
+                <Text style={styles.expenseText}>{key.charAt(0).toUpperCase() + key.slice(1)}: {value} :-</Text>
+            </View>
+        ));
+    };
+
+    const renderVariableExpenses = (expenses: VariableExpense[]) => {
+        return expenses.map((expense) => (
+            <View key={expense.date + expense.description} style={styles.expenseItem}>
+                <MaterialIcons name="attach-money" size={20} color="black" />
+                <View>
+                    <Text style={styles.expenseText}>{expense.description}: {expense.amount} :-</Text>
+                    <Text style={styles.expenseDate}>{expense.date}</Text>
+                </View>
+            </View>
+        ));
+    }
+
     return (
         <View style={styles.card}>
             <Text style={styles.title}>Budget for {month}/{year}</Text>
@@ -27,15 +49,21 @@ const BudgetCard = ({ month, year }: { month: number, year: number }) => {
                 <Text>Remaining balance: {budget.remaningBalance}</Text>
             </View>
 
-            <View style={styles.expenseSection}>
-                <Text style={styles.sectionTitle}>Fixed Expenses</Text>
-                {Object.entries(budget.fixedExpenses).map(([key, value]) => (
-                    <View key={key} style={styles.expenseItem}>
-                        <MaterialIcons name="attach-money" size={20} color="black" />
-                        <Text style={styles.expenseText}>{key.charAt(0).toUpperCase() + key.slice(1)}: {value} :-</Text>
-                    </View>
-                ))}
-            </View>
+            {budget.fixedExpenses && (
+                <View style={styles.expenseSection}>
+                    <Text style={styles.sectionTitle}>Fixed Expenses</Text>
+                    {renderExpenses(budget.fixedExpenses)}
+                </View>
+            )}
+
+            {budget.variableExpenses && (
+                <View style={styles.expenseSection}>
+                    <Text style={styles.sectionTitle}>Variable Expenses</Text>
+                    <Text>Planned: {budget.variableExpenses.planned}</Text>
+                    {renderVariableExpenses(budget.variableExpenses.expenses)}
+                </View>
+            )}
+
         </View>
     );
 };
@@ -63,14 +91,6 @@ const styles = StyleSheet.create({
     summary: {
         marginBottom: 15,
     },
-    incomeText: {
-        fontSize: 18,
-        color: '#4CAF50',
-    },
-    balanceText: {
-        fontSize: 18,
-        color: '#F44336',
-    },
     expenseSection: {
         marginTop: 10,
     },
@@ -88,10 +108,6 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         fontSize: 16,
     },
-    loadingText: {
-        textAlign: 'center',
-        fontSize: 18,
-    },
     errorText: {
         color: 'red',
         textAlign: 'center',
@@ -100,6 +116,10 @@ const styles = StyleSheet.create({
     emptyText: {
         textAlign: 'center',
         fontSize: 18,
+    },
+    expenseDate: {
+        fontSize: 12,
+        color: "gray",
     },
 });
 

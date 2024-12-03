@@ -1,43 +1,31 @@
 import BudgetCard from "@/components/BudgetCard";
-import { useAuth } from "@/hooks/useAuth";
-import { db } from "@/services/firebase";
+import useUser from "@/hooks/useUser";
 import { Link } from "expo-router";
-import { doc, getDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
 
 const HomeScreen = () => {
-    const { currentUser: user } = useAuth();
-    const [userName, setUserName] = useState<string | null>(null);
+    const { data, loading } = useUser();
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth() + 1;
     const currentYear = currentDate.getFullYear();
 
-    useEffect(() => {
-        const fetchUserData = async () => {
-            if (!user) return;
-
-            const userDoc = await getDoc(doc(db, 'users', user.uid));
-
-            if (userDoc.exists()) {
-                setUserName(userDoc.data().name);
-            }
-        };
-
-        fetchUserData();
-    }, [user]);
-
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Hello, {userName}</Text>
+            {loading ? (
+                <ActivityIndicator size="large" />
+            ) : (
+                <>
+                    <Text style={styles.title}>Hello, {data?.name}</Text>
 
-            <Link href="/budget" style={styles.link}>
-                <Text style={styles.buttonText}>Go to Budget</Text>
-            </Link>
+                    <Link href="/budget" style={styles.link}>
+                        <Text style={styles.buttonText}>Go to Budget</Text>
+                    </Link>
 
-            <ScrollView style={styles.scrollView}>
-                <BudgetCard month={currentMonth} year={currentYear} />
-            </ScrollView>
+                    <ScrollView style={styles.scrollView}>
+                        <BudgetCard month={currentMonth} year={currentYear} />
+                    </ScrollView>
+                </>
+            )}
         </View>
     );
 };

@@ -21,7 +21,7 @@ export interface Budget {
   };
 }
 
-interface VariableExpense {
+export interface VariableExpense {
   date: string;
   description: string;
   amount: number;
