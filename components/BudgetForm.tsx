@@ -46,7 +46,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ initialValues, onSubmit }) => {
     const currentMonth = currentDate.getMonth() + 1;
     const currentYear = currentDate.getFullYear();
 
-    const { control, handleSubmit, reset, ...rest } = useForm<Budget>({
+    const { control, handleSubmit, ...rest } = useForm<Budget>({
         resolver: yupResolver(budgetSchema),
         defaultValues: initialValues || {
             month: currentMonth,
@@ -85,9 +85,9 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ initialValues, onSubmit }) => {
         }
     };
 
-    useEffect(() => {
-        reset(initialValues);
-    }, [initialValues, isSubmitting, reset]);
+    // useEffect(() => {
+    //     reset(initialValues);
+    // }, [initialValues, isSubmitting, reset]);
 
     return (
         <ScrollView style={styles.container}>
