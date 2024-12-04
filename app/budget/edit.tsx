@@ -5,6 +5,7 @@ import useBudget from "@/hooks/useBudget";
 import { db } from "@/services/firebase";
 import { Budget } from "@/types/Budget.types";
 import { useSearchParams } from "expo-router/build/hooks";
+import { useRouter } from "expo-router";
 import { FirebaseError } from "firebase/app";
 import { collection, doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { Alert, Text } from "react-native";
@@ -15,13 +16,12 @@ const EditBudgetScreen = () => {
     const month = parseInt(params.get('month') || "1");
     const year = parseInt(params.get('year') || new Date().getFullYear().toString());
     const { budget, error: budgetError, loading: budgetLoading } = useBudget(month, year);
+    const router = useRouter();
 
     const updateMonthlyBudget = async (data: Budget) => {
         if (!currentUser) return;
 
-        if (!budget) {
-            throw new Error("Budget data is missing");
-        }
+        if (!budget) throw new Error("Budget data is missing");
 
         try {
             const budgetRef = doc(collection(db, `users/${currentUser.uid}/budgets`), budget._id);
@@ -29,6 +29,10 @@ const EditBudgetScreen = () => {
             const remainingBalance = data.totalIncome - sumOfFixedExpenses;
             await updateDoc(budgetRef, { ...data, remaningBalance: remainingBalance, updatedAt: serverTimestamp() });
             Alert.alert("Success", "Budget updated successfully!");
+
+            setTimeout(() => {
+                router.replace('/budget');
+            }, 2000);
 
         } catch (error) {
             if (error instanceof FirebaseError) {

@@ -29,12 +29,13 @@ const BudgetScreen = () => {
             {budgetExists ? (
                 <Link href={`/budget/edit?month=${currentMonth}&year=${currentYear}`}>
                     <MaterialIcons name="edit" size={20} />
-                    Update current budget
+                    <Text>Update budget for {new Date(currentYear, currentMonth - 1).toLocaleString('default', { month: 'long' })} {currentYear}</Text>
                 </Link>
             ) : (
                 <Link href={"/budget/add"}>
                     <MaterialIcons name="add" size={20} />
-                    Create a budget for {new Date().toLocaleString('default', { month: 'long' })}                    </Link>
+                    <Text>Create a budget for {new Date(currentYear, currentMonth - 1).toLocaleString('default', { month: 'long' })} {currentYear}</Text>
+                </Link>
             )}
         </View>
     )

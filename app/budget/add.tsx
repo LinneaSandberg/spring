@@ -2,12 +2,14 @@ import BudgetForm from "@/components/forms/BudgetForm";
 import { useAuth } from "@/hooks/useAuth";
 import { db } from "@/services/firebase";
 import { Budget } from "@/types/Budget.types";
+import { useRouter } from "expo-router";
 import { FirebaseError } from "firebase/app";
 import { addDoc, collection, serverTimestamp, updateDoc } from "firebase/firestore";
 import { Alert } from "react-native";
 
 const AddBudgetScreen = () => {
     const { currentUser } = useAuth();
+    const router = useRouter();
 
     const addMonthlyBudget = async (data: Budget) => {
         if (!currentUser) return;
@@ -16,7 +18,6 @@ const AddBudgetScreen = () => {
             const budgetsCollectionRef = collection(db, `users/${currentUser.uid}/budgets`);
             const sumOfFixedExpenses = Object.values(data.fixedExpenses).reduce((sum, cost) => sum + (cost || 0), 0);
             const remainingBalance = data.totalIncome - sumOfFixedExpenses;
-
             const docRef = await addDoc(budgetsCollectionRef, {
                 ...data,
                 remainingBalance,
@@ -25,7 +26,12 @@ const AddBudgetScreen = () => {
 
             const updatedBudget = { ...data, _id: docRef.id };
             await updateDoc(docRef, { _id: updatedBudget._id });
+
             Alert.alert('Budget saved successfully');
+
+            setTimeout(() => {
+                router.replace('/budget');
+            }, 2000);
 
         } catch (error) {
             if (error instanceof FirebaseError) {

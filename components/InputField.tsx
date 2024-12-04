@@ -23,21 +23,14 @@ export const InputField: React.FC<InputFieldProps> = ({
     error,
     defaultValue
 }) => {
-    const [value, setValue] = useState(defaultValue || '');
     const [isFocused, setIsFocused] = useState(false);
 
     const handleFocus = () => {
         setIsFocused(true);
-        if (value === '0' || value === defaultValue) {
-            setValue('');
-        }
     };
 
     const handleBlur = () => {
         setIsFocused(false);
-        if (value === '') {
-            setValue(defaultValue || '');
-        }
     };
 
     return (
@@ -46,22 +39,17 @@ export const InputField: React.FC<InputFieldProps> = ({
             <Controller
                 control={control}
                 name={name}
-                render={({ field: { onChange, onBlur: onBlurField } }) => (
+                render={({ field: { onChange, value } }) => (
                     <TextInput
                         style={[
                             styles.input,
                             isFocused && styles.inputFocused
-                        ]} placeholder={placeholder}
+                        ]}
+                        placeholder={placeholder}
                         keyboardType={keyboardType}
-                        onBlur={() => {
-                            handleBlur();
-                            onBlurField();
-                        }}
+                        onBlur={handleBlur}
+                        onChangeText={onChange}
                         onFocus={handleFocus}
-                        onChangeText={(text) => {
-                            setValue(text);
-                            onChange(text);
-                        }}
                         value={value}
                         secureTextEntry={secureTextEntry}
                         defaultValue={defaultValue}

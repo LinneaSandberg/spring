@@ -44,7 +44,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ initialValues, onSubmit }) => {
         try {
             setIsSubmitting(true);
             await onSubmit(data);
-            setTimeout(() => router.replace('/budget'), 2000);
+            // setTimeout(() => router.replace('/budget'), 2000);
 
         } catch (error) {
             if (error instanceof Error) {
