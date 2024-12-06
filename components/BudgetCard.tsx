@@ -1,48 +1,25 @@
-import useBudget from "@/hooks/useBudget";
-import { View, Text, StyleSheet } from "react-native";
-import LoadingSpinner from "./LoadingSpinner";
 import { MaterialIcons } from '@expo/vector-icons';
-import { Expenses, VariableExpense } from "@/types/Budget.types";
+import { Budget, Expenses } from "@/types/Budget.types";
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
 
-const BudgetCard = ({ month, year }: { month: number, year: number }) => {
-    const { budget, loading, error } = useBudget(month, year);
+interface BudgetCardProps {
+    budget: Budget;
+}
 
-    if (loading) {
-        return <LoadingSpinner />;
-    }
-
-    if (error) {
-        return <Text style={styles.errorText}>Error: {error.message}</Text>;
-    }
-
-    if (!budget) {
-        return <Text style={styles.emptyText}>No budget found for this month.</Text>;
-    }
-
+const BudgetCard: React.FC<BudgetCardProps> = ({ budget }) => {
     const renderExpenses = (expenses: Expenses) => {
         return Object.entries(expenses).map(([key, value]) => (
             <View key={key} style={styles.expenseItem}>
                 <MaterialIcons name="attach-money" size={20} color="black" />
-                <Text style={styles.expenseText}>{key.charAt(0).toUpperCase() + key.slice(1)}: {value} :-</Text>
+                <Text style={styles.expenseText}>{key.charAt(0).toUpperCase() + key.slice(1)}: {value}</Text>
             </View>
         ));
     };
 
-    const renderVariableExpenses = (expenses: VariableExpense[]) => {
-        return expenses.map((expense) => (
-            <View key={expense.date + expense.description} style={styles.expenseItem}>
-                <MaterialIcons name="attach-money" size={20} color="black" />
-                <View>
-                    <Text style={styles.expenseText}>{expense.description}: {expense.amount} :-</Text>
-                    <Text style={styles.expenseDate}>{expense.date}</Text>
-                </View>
-            </View>
-        ));
-    }
-
     return (
         <View style={styles.card}>
-            <Text style={styles.title}>Budget for {month}/{year}</Text>
+            <Text style={styles.title}>Budget for {budget.month}/{budget.year}</Text>
 
             <View style={styles.summary}>
                 <Text>Total income: {budget.totalIncome}</Text>
@@ -52,18 +29,12 @@ const BudgetCard = ({ month, year }: { month: number, year: number }) => {
             {budget.fixedExpenses && (
                 <View style={styles.expenseSection}>
                     <Text style={styles.sectionTitle}>Fixed Expenses</Text>
-                    {renderExpenses(budget.fixedExpenses)}
+                    {Object.keys(budget.fixedExpenses).length > 0
+                        ? renderExpenses(budget.fixedExpenses)
+                        : <Text style={styles.emptyText}>No fixed expenses found.</Text>
+                    }
                 </View>
             )}
-
-            {budget.variableExpenses && (
-                <View style={styles.expenseSection}>
-                    <Text style={styles.sectionTitle}>Variable Expenses</Text>
-                    <Text>Planned: {budget.variableExpenses.planned}</Text>
-                    {renderVariableExpenses(budget.variableExpenses.expenses)}
-                </View>
-            )}
-
         </View>
     );
 };

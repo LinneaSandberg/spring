@@ -9,7 +9,8 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.peppar10.spring"
     },
     "android": {
       "adaptiveIcon": {
@@ -37,6 +38,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "397dbf4d-0ae9-4343-b089-91104634d159"
+      }
+    },
+    "owner": "peppar10"
   }
 }

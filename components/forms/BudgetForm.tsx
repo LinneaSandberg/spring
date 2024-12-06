@@ -1,15 +1,14 @@
 import { Text, StyleSheet, TouchableOpacity, Alert, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import React, { useState } from 'react';
-import { Budget } from '@/types/Budget.types';
-import { useRouter } from "expo-router";
+import { BudgetFormValues } from '@/types/Budget.types';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { budgetSchema } from '@/validation/yupValidation';
 import { InputField } from '../InputField';
 
 interface BudgetFormProps {
-    initialValues?: Budget;
-    onSubmit: (data: Budget) => Promise<void>;
+    initialValues?: BudgetFormValues;
+    onSubmit: (data: BudgetFormValues) => Promise<void>;
 }
 
 const BudgetForm: React.FC<BudgetFormProps> = ({ initialValues, onSubmit }) => {
@@ -18,7 +17,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ initialValues, onSubmit }) => {
     const currentMonth = currentDate.getMonth() + 1;
     const currentYear = currentDate.getFullYear();
 
-    const { control, handleSubmit, formState: { errors } } = useForm<Budget>({
+    const { control, handleSubmit, formState: { errors } } = useForm<BudgetFormValues>({
         resolver: yupResolver(budgetSchema),
         defaultValues: initialValues || {
             month: currentMonth,
@@ -32,15 +31,12 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ initialValues, onSubmit }) => {
                 entertainment: 0,
             },
             remaningBalance: 0,
-            variableExpenses: {
-                planned: 0,
-                expenses: [],
-            },
+            plannedExpenses: undefined,
+            plannedSaving: undefined,
         },
     });
-    const router = useRouter();
 
-    const onSubmitForm: SubmitHandler<Budget> = async (data) => {
+    const onSubmitForm: SubmitHandler<BudgetFormValues> = async (data) => {
         try {
             setIsSubmitting(true);
             await onSubmit(data);
@@ -126,6 +122,26 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ initialValues, onSubmit }) => {
                     error={errors.fixedExpenses?.entertainment?.message}
                 />
 
+                <InputField
+                    placeholder='How much do you think you will use more than planned?'
+                    control={control}
+                    name="plannedExpenses"
+                    label="Planned Expenses"
+                    keyboardType="numeric"
+                    defaultValue={initialValues?.plannedExpenses?.toString() || ''}
+                    error={errors.plannedExpenses?.message}
+                />
+
+                <InputField
+                    placeholder='How much are you planning to save this month?'
+                    control={control}
+                    name="plannedSaving"
+                    label="Planned Saving"
+                    keyboardType="numeric"
+                    defaultValue={initialValues?.plannedSaving?.toString() || ''}
+                    error={errors.plannedSaving?.message}
+                />
+
                 <TouchableOpacity
                     style={[styles.button, isSubmitting && styles.buttonDisabled]}
                     onPress={handleSubmit(onSubmitForm)}
@@ -160,21 +176,6 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         fontWeight: '600',
         color: '#1E1E1E',
-    },
-    expenseTitle: {
-        fontSize: 16,
-        marginVertical: 5,
-        fontWeight: '400',
-        color: '#1E1E1E',
-    },
-    input: {
-        height: 40,
-        borderColor: '#ccc',
-        backgroundColor: '#F3F3F3',
-        borderRadius: 10,
-        borderWidth: 1,
-        marginBottom: 15,
-        paddingLeft: 8,
     },
     button: {
         marginTop: 20,

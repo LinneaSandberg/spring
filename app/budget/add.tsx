@@ -1,7 +1,7 @@
 import BudgetForm from "@/components/forms/BudgetForm";
 import { useAuth } from "@/hooks/useAuth";
 import { db } from "@/services/firebase";
-import { Budget } from "@/types/Budget.types";
+import { Budget, BudgetFormValues } from "@/types/Budget.types";
 import { useRouter } from "expo-router";
 import { FirebaseError } from "firebase/app";
 import { addDoc, collection, serverTimestamp, updateDoc } from "firebase/firestore";
@@ -11,21 +11,29 @@ const AddBudgetScreen = () => {
     const { currentUser } = useAuth();
     const router = useRouter();
 
-    const addMonthlyBudget = async (data: Budget) => {
+    const addMonthlyBudget = async (data: BudgetFormValues) => {
         if (!currentUser) return;
 
         try {
             const budgetsCollectionRef = collection(db, `users/${currentUser.uid}/budgets`);
             const sumOfFixedExpenses = Object.values(data.fixedExpenses).reduce((sum, cost) => sum + (cost || 0), 0);
             const remainingBalance = data.totalIncome - sumOfFixedExpenses;
-            const docRef = await addDoc(budgetsCollectionRef, {
+
+            const budget: Budget = {
                 ...data,
-                remainingBalance,
+                remaningBalance: remainingBalance,
+                variableExpenses: {
+                    totalSum: 0,
+                    expenses: [],
+                },
+            };
+
+            const docRef = await addDoc(budgetsCollectionRef, {
+                ...budget,
                 createdAt: serverTimestamp(),
             });
 
-            const updatedBudget = { ...data, _id: docRef.id };
-            await updateDoc(docRef, { _id: updatedBudget._id });
+            await updateDoc(docRef, { _id: docRef.id });
 
             Alert.alert('Budget saved successfully');
 

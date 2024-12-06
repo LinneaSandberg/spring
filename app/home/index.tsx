@@ -1,4 +1,4 @@
-import BudgetCard from "@/components/BudgetCard";
+import BudgetAndExpenses from "@/components/BudgetAndExpenses";
 import useUser from "@/hooks/useUser";
 import { Link } from "expo-router";
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
@@ -22,7 +22,7 @@ const HomeScreen = () => {
                     </Link>
 
                     <ScrollView style={styles.scrollView}>
-                        <BudgetCard month={currentMonth} year={currentYear} />
+                        <BudgetAndExpenses month={currentMonth} year={currentYear} />
                     </ScrollView>
                 </>
             )}

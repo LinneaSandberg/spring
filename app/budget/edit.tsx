@@ -3,7 +3,7 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import { useAuth } from "@/hooks/useAuth";
 import useBudget from "@/hooks/useBudget";
 import { db } from "@/services/firebase";
-import { Budget } from "@/types/Budget.types";
+import { Budget, BudgetFormValues } from "@/types/Budget.types";
 import { useSearchParams } from "expo-router/build/hooks";
 import { useRouter } from "expo-router";
 import { FirebaseError } from "firebase/app";
@@ -18,7 +18,7 @@ const EditBudgetScreen = () => {
     const { budget, error: budgetError, loading: budgetLoading } = useBudget(month, year);
     const router = useRouter();
 
-    const updateMonthlyBudget = async (data: Budget) => {
+    const updateMonthlyBudget = async (data: BudgetFormValues) => {
         if (!currentUser) return;
 
         if (!budget) throw new Error("Budget data is missing");
@@ -27,7 +27,15 @@ const EditBudgetScreen = () => {
             const budgetRef = doc(collection(db, `users/${currentUser.uid}/budgets`), budget._id);
             const sumOfFixedExpenses = Object.values(data.fixedExpenses).reduce((sum, cost) => sum + cost, 0);
             const remainingBalance = data.totalIncome - sumOfFixedExpenses;
-            await updateDoc(budgetRef, { ...data, remaningBalance: remainingBalance, updatedAt: serverTimestamp() });
+
+            const updatedBudget: Partial<Budget> = {
+                ...data,
+                remaningBalance: remainingBalance,
+                updatedAt: serverTimestamp(),
+            };
+
+            await updateDoc(budgetRef, updatedBudget);
+
             Alert.alert("Success", "Budget updated successfully!");
 
             setTimeout(() => {

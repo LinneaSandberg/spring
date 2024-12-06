@@ -43,16 +43,27 @@ export const budgetSchema = Yup.object({
     entertainment: createNumberField(),
   }).required(),
   remaningBalance: Yup.number().required(),
-  variableExpenses: Yup.object({
-    planned: Yup.number().required(),
-    expenses: Yup.array()
-      .of(
-        Yup.object({
-          date: Yup.string().required(),
-          description: Yup.string().required(),
-          amount: Yup.number().required(),
-        })
-      )
-      .default([]),
-  }).required(),
+  plannedExpenses: Yup.number().optional(),
+  plannedSaving: Yup.number().optional(),
 }).required();
+
+export const expenseSchema = Yup.object({
+  _id: Yup.string().required(),
+  date: Yup.date()
+    .required("Date is required")
+    .test("is-past-date", "Date cannot be in the future", (value) => {
+      if (!value) return true;
+      const selectedDate = new Date(value);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return selectedDate <= today;
+    }),
+  description: Yup.string()
+    .required("Description is required")
+    .min(2, "Description must be at least 2 characters"),
+  amount: Yup.number()
+    .required("Amount is required")
+    .positive("Amount must be a positive number")
+    .test("not-zero", "Amount cannot be zero", (value) => value !== 0),
+  necessary: Yup.boolean().default(false),
+});
