@@ -23,6 +23,7 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
     const {
         control,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm<ExpenseFormValues>({
         resolver: yupResolver(expenseSchema),
@@ -41,6 +42,7 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
             date: Timestamp.fromDate(data.date),
         };
         onSubmit(expenseData);
+        reset();
         onClose();
     };
 
