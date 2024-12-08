@@ -24,6 +24,7 @@ const BudgetCard: React.FC<BudgetCardProps> = ({ budget }) => {
             <View style={styles.summary}>
                 <Text>Total income: {budget.totalIncome}</Text>
                 <Text>Remaining balance: {budget.remaningBalance}</Text>
+                {budget.amountAfterBudgetting > 0 && <Text>Amount after budgeting: {budget.amountAfterBudgetting}</Text>}
             </View>
 
             {budget.fixedExpenses && (

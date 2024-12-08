@@ -18,10 +18,12 @@ const AddBudgetScreen = () => {
             const budgetsCollectionRef = collection(db, `users/${currentUser.uid}/budgets`);
             const sumOfFixedExpenses = Object.values(data.fixedExpenses).reduce((sum, cost) => sum + (cost || 0), 0);
             const remainingBalance = data.totalIncome - sumOfFixedExpenses;
+            const budgettingSumLeft = remainingBalance - (data.plannedExpenses || 0) - (data.plannedSaving || 0);
 
             const docRef = await addDoc(budgetsCollectionRef, {
                 ...data,
                 remaningBalance: remainingBalance,
+                amountAfterBudgetting: budgettingSumLeft,
                 variableExpenses: {
                     totalSum: 0,
                     expenses: [],

@@ -18,6 +18,7 @@ export interface Budget {
   remaningBalance: number;
   plannedExpenses: number | undefined;
   plannedSaving: number | undefined;
+  amountAfterBudgetting: number;
   variableExpenses: {
     totalSum: number;
     expenses: VariableExpense[];
