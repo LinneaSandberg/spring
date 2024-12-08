@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import useBudget from '@/hooks/useBudget';
 import LoadingSpinner from './LoadingSpinner';
 import BudgetCard from './BudgetCard';
@@ -26,17 +26,22 @@ const BudgetAndExpenses: React.FC<BudgetAndExpensesProps> = ({ month, year }) =>
     }
 
     return (
-        <View>
+        <View style={styles.container}>
             <BudgetCard budget={budget} />
 
-            {budget.variableExpenses.expenses.map((expense, index) => (
-                <ExpenseListItem key={index} expense={expense} />
-            ))}
+            <ScrollView>
+                {budget.variableExpenses.expenses.map((expense, index) => (
+                    <ExpenseListItem key={index} expense={expense} />
+                ))}
+            </ScrollView>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
+    container: {
+        height: '100%',
+    },
     errorText: {
         color: 'red',
         fontSize: 16,

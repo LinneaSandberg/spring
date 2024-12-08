@@ -1,7 +1,7 @@
 import BudgetAndExpenses from "@/components/BudgetAndExpenses";
 import useUser from "@/hooks/useUser";
 import { Link } from "expo-router";
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 
 const HomeScreen = () => {
     const { data, loading } = useUser();
@@ -21,9 +21,9 @@ const HomeScreen = () => {
                         <Text style={styles.buttonText}>Go to Budget</Text>
                     </Link>
 
-                    <ScrollView style={styles.scrollView}>
+                    <View style={styles.view}>
                         <BudgetAndExpenses month={currentMonth} year={currentYear} />
-                    </ScrollView>
+                    </View>
                 </>
             )}
         </View>
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         textAlign: 'center',
     },
-    scrollView: {
+    view: {
         marginTop: 10,
         maxHeight: '70%',
     },
