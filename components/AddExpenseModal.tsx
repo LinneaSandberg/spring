@@ -33,11 +33,6 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
             necessary: false,
         }
     });
-    const [IsNecessary, setIsNecessary] = useState(false);
-
-    const handleNessesarly = () => {
-        setIsNecessary(!IsNecessary);
-    }
 
     const onSubmitForm = (data: ExpenseFormValues) => {
         const expenseData: VariableExpense = {
@@ -68,7 +63,7 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
                         />
                     )}
                 />
-                {errors.description && <Text>{errors.description.message}</Text>}
+                {errors.description && <Text style={[styles.error, styles.errorMargin]}>{errors.description.message}</Text>}
 
                 <Controller
                     control={control}
@@ -83,11 +78,17 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
                         />
                     )}
                 />
-                {errors.amount && <Text>{errors.amount.message}</Text>}
+                {errors.amount && <Text style={[styles.error, styles.errorMargin]}>{errors.amount.message}</Text>}
 
-                <TouchableOpacity onPress={handleNessesarly}>
-                    <Text>Necessary: {IsNecessary ? 'Yes' : 'No'}</Text>
-                </TouchableOpacity>
+                <Controller
+                    control={control}
+                    name="necessary"
+                    render={({ field: { value, onChange } }) => (
+                        <TouchableOpacity onPress={() => onChange(!value)}>
+                            <Text>Necessary: {value ? 'Yes' : 'No'}</Text>
+                        </TouchableOpacity>
+                    )}
+                />
 
                 <View style={styles.modalButtons}>
                     <TouchableOpacity style={styles.modalButton} onPress={handleSubmit(onSubmitForm)}>
@@ -134,6 +135,17 @@ const styles = StyleSheet.create({
     },
     modalButtonText: {
         color: 'black',
+    },
+    error: {
+        color: 'red',
+        fontSize: 12,
+    },
+    errorMargin: {
+        marginBottom: 20,
+        marginTop: -10,
+        marginLeft: 8,
+        textAlign: 'left',
+        fontWeight: 'bold',
     },
 });
 

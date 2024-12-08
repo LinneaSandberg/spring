@@ -48,16 +48,7 @@ export const budgetSchema = Yup.object({
 }).required();
 
 export const expenseSchema = Yup.object({
-  date: Yup.date()
-    .required("Date is required")
-    .test("is-past-date", "Date cannot be in the future", (value) => {
-      if (!value) return true;
-      const selectedDate = new Date(value);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      return selectedDate <= today;
-      1;
-    }),
+  date: Yup.date().required("Date is required"),
   description: Yup.string()
     .required("Description is required")
     .min(2, "Description must be at least 2 characters"),
