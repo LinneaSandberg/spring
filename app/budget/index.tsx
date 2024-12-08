@@ -5,7 +5,7 @@ import useBudget from '@/hooks/useBudget';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { MaterialIcons } from '@expo/vector-icons';
 import AddExpenseModal from '@/components/AddExpenseModal';
-import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { useAuth } from '@/hooks/useAuth';
 import { VariableExpense } from '@/types/Budget.types';
 import { db } from '@/services/firebase';
@@ -29,13 +29,18 @@ const BudgetScreen = () => {
 
     const handleModalSubmit = async (expenseData: VariableExpense) => {
         try {
-            if (budget?._id) {
-                const budgetRef = doc(db, `users/${currentUser?.uid}/budgets`, budget._id);
-
-                await updateDoc(budgetRef, {
-                    'variableExpenses.expenses': arrayUnion(expenseData)
-                });
+            if (!budget?._id) {
+                return;
             }
+            const budgetRef = doc(db, `users/${currentUser?.uid}/budgets`, budget._id);
+            const budgetDoc = await getDoc(budgetRef);
+            const existingExpenses = budgetDoc.data()?.variableExpenses.expenses || [];
+            const updatedExpenses = [...existingExpenses, expenseData];
+
+            await updateDoc(budgetRef, {
+                'variableExpenses.expenses': updatedExpenses
+            });
+
         } catch (error) {
             console.error("Error adding expense:", error);
         } finally {

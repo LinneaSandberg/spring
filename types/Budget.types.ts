@@ -1,6 +1,5 @@
 import { Months } from "@/enum/monthEnum";
-import { FieldValue } from "firebase/firestore";
-import { Field } from "react-hook-form";
+import { Timestamp } from "firebase/firestore";
 
 export interface Expenses {
   housingCosts: number;
@@ -23,7 +22,8 @@ export interface Budget {
     totalSum: number;
     expenses: VariableExpense[];
   };
-  updatedAt?: FieldValue;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
 }
 
 export interface BudgetFormValues {
@@ -39,6 +39,13 @@ export interface BudgetFormValues {
 
 export interface VariableExpense {
   _id: string;
+  date: Timestamp;
+  description: string;
+  amount: number;
+  necessary: boolean;
+}
+
+export interface ExpenseFormValues {
   date: Date;
   description: string;
   amount: number;

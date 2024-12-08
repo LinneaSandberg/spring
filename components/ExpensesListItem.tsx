@@ -1,4 +1,5 @@
-import { Expenses, VariableExpense } from "@/types/Budget.types";
+import { firebaseTimestampToString } from "@/helpers/time";
+import { VariableExpense } from "@/types/Budget.types";
 import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
@@ -8,15 +9,15 @@ interface ExpenseListItemProps {
 }
 
 const ExpenseListItem: React.FC<ExpenseListItemProps> = ({ expense }) => {
-    const date = new Date(expense.date);
-    const monthName = date.toLocaleString('default', { month: 'long' });
+    const firebaseDate = firebaseTimestampToString(expense.date);
+    const date = new Date(firebaseDate);
     const day = date.getDate();
-    const formattedDate = `${day} ${monthName}`;
+    const monthName = date.toLocaleString('default', { month: 'short' });
 
     return (
         <View style={styles.expenseItem}>
             <MaterialIcons name="attach-money" size={20} color="black" />
-            <Text style={styles.expenseText}>{formattedDate} - {expense.description}: {expense.amount} :-</Text>
+            <Text style={styles.expenseText}>{day} {monthName} - {expense.description}: {expense.amount} :-</Text>
         </View>
     );
 }

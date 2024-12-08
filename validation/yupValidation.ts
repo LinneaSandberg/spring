@@ -48,7 +48,6 @@ export const budgetSchema = Yup.object({
 }).required();
 
 export const expenseSchema = Yup.object({
-  _id: Yup.string().required(),
   date: Yup.date()
     .required("Date is required")
     .test("is-past-date", "Date cannot be in the future", (value) => {
@@ -57,6 +56,7 @@ export const expenseSchema = Yup.object({
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       return selectedDate <= today;
+      1;
     }),
   description: Yup.string()
     .required("Description is required")

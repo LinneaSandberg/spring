@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, Modal, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
-import {
-    useForm,
-    Controller
-} from 'react-hook-form';
-import { VariableExpense } from '@/types/Budget.types';
+import { useForm, Controller } from 'react-hook-form';
+import { ExpenseFormValues, VariableExpense } from '@/types/Budget.types';
 import { yupResolver } from '@hookform/resolvers/yup';
 import DatePicker from './DatePicker';
 import { expenseSchema } from '@/validation/yupValidation';
+import { Timestamp } from 'firebase/firestore';
 
 interface AddExpenseModalProps {
     visible: boolean;
@@ -26,10 +24,9 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
         control,
         handleSubmit,
         formState: { errors },
-    } = useForm<VariableExpense>({
+    } = useForm<ExpenseFormValues>({
         resolver: yupResolver(expenseSchema),
         defaultValues: {
-            _id: budgetId,
             date: new Date(),
             description: "",
             amount: 0,
@@ -42,8 +39,13 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
         setIsNecessary(!IsNecessary);
     }
 
-    const onSubmitForm = (data: VariableExpense) => {
-        onSubmit({ ...data, _id: budgetId });
+    const onSubmitForm = (data: ExpenseFormValues) => {
+        const expenseData: VariableExpense = {
+            ...data,
+            _id: budgetId,
+            date: Timestamp.fromDate(data.date),
+        };
+        onSubmit(expenseData);
         onClose();
     };
 
@@ -91,9 +93,9 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
                     <TouchableOpacity style={styles.modalButton} onPress={handleSubmit(onSubmitForm)}>
                         <Text style={styles.modalButtonText}>Save</Text>
                     </TouchableOpacity>
+
                     <TouchableOpacity style={styles.modalButton} onPress={onClose}>
                         <Text style={styles.modalButtonText}>Cancel</Text>
-
                     </TouchableOpacity>
 
                 </View>

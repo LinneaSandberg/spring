@@ -7,7 +7,7 @@ import { Budget, BudgetFormValues } from "@/types/Budget.types";
 import { useSearchParams } from "expo-router/build/hooks";
 import { useRouter } from "expo-router";
 import { FirebaseError } from "firebase/app";
-import { collection, doc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { collection, doc, serverTimestamp, Timestamp, updateDoc } from "firebase/firestore";
 import { Alert, Text } from "react-native";
 
 const EditBudgetScreen = () => {
@@ -31,7 +31,7 @@ const EditBudgetScreen = () => {
             const updatedBudget: Partial<Budget> = {
                 ...data,
                 remaningBalance: remainingBalance,
-                updatedAt: serverTimestamp(),
+                updatedAt: serverTimestamp() as Timestamp,
             };
 
             await updateDoc(budgetRef, updatedBudget);

@@ -1,7 +1,7 @@
 import BudgetForm from "@/components/forms/BudgetForm";
 import { useAuth } from "@/hooks/useAuth";
 import { db } from "@/services/firebase";
-import { Budget, BudgetFormValues } from "@/types/Budget.types";
+import { BudgetFormValues } from "@/types/Budget.types";
 import { useRouter } from "expo-router";
 import { FirebaseError } from "firebase/app";
 import { addDoc, collection, serverTimestamp, updateDoc } from "firebase/firestore";
@@ -19,17 +19,13 @@ const AddBudgetScreen = () => {
             const sumOfFixedExpenses = Object.values(data.fixedExpenses).reduce((sum, cost) => sum + (cost || 0), 0);
             const remainingBalance = data.totalIncome - sumOfFixedExpenses;
 
-            const budget: Budget = {
+            const docRef = await addDoc(budgetsCollectionRef, {
                 ...data,
                 remaningBalance: remainingBalance,
                 variableExpenses: {
                     totalSum: 0,
                     expenses: [],
                 },
-            };
-
-            const docRef = await addDoc(budgetsCollectionRef, {
-                ...budget,
                 createdAt: serverTimestamp(),
             });
 
