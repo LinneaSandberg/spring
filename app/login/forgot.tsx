@@ -103,10 +103,10 @@ const styles = StyleSheet.create({
         fontSize: 18,
         textAlign: 'center',
         marginBottom: 10,
-        backgroundColor: '#FFD700',
+        backgroundColor: '#FDD848',
         borderColor: '#1E1E1E',
         borderWidth: 1,
-        padding: 10,
+        padding: 20,
         borderRadius: 10,
     },
     buttonDisabled: {
