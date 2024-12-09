@@ -1,56 +1,24 @@
-import { query, where, getDocs, collection } from "firebase/firestore";
-import { useAuth } from "@/hooks/useAuth";
-import { useEffect, useState } from "react";
-import { Budget } from "@/types/Budget.types";
-import { db } from "@/services/firebase";
-import { Alert } from "react-native";
+import { where } from "firebase/firestore";
+import { getUserBudgets } from "@/services/firebase";
+import { useAuth } from "./useAuth";
+import useStreamCollection from "./useStreamCollection";
 
 const useBudget = (month: number, year: number) => {
   const { currentUser } = useAuth();
-  const [budget, setBudget] = useState<Budget | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
 
-  useEffect(() => {
-    const fetchBudget = async () => {
-      setLoading(true);
-      setError(null);
+  if (!currentUser) {
+    throw new Error("User is not logged in");
+  }
 
-      if (!currentUser) {
-        throw new Error("User is not authenticated");
-      }
+  const { data: budgets, loading } = useStreamCollection(
+    getUserBudgets(currentUser.uid),
+    where("month", "==", month),
+    where("year", "==", year)
+  );
 
-      try {
-        const q = query(
-          collection(db, `users/${currentUser.uid}/budgets`),
-          where("month", "==", month),
-          where("year", "==", year)
-        );
+  const budget = budgets?.[0] ?? null;
 
-        const querySnapshot = await getDocs(q);
-        if (querySnapshot.empty) {
-          setBudget(null);
-        } else {
-          const budgetDoc = querySnapshot.docs[0];
-          const budgetData = budgetDoc.data() as Budget;
-          budgetData._id = budgetDoc.id;
-          setBudget(budgetData);
-        }
-      } catch (error) {
-        if (error instanceof Error) {
-          Alert.alert("Error", error.message);
-        } else {
-          Alert.alert("Error", "Failed to fetch budget data");
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBudget();
-  }, [month, year]);
-
-  return { budget, loading, error };
+  return { budget, loading };
 };
 
 export default useBudget;

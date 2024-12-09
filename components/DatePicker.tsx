@@ -19,7 +19,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ control, name, label }) => {
             <Text style={styles.label}>{label}</Text>
 
             <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-                <Text>{date.format('YYYY-MM-DD')}</Text>
+                <Text style={styles.text}>{date.format('YYYY-MM-DD')}</Text>
             </TouchableOpacity>
 
             {showDatePicker && (
@@ -49,10 +49,19 @@ const DatePicker: React.FC<DatePickerProps> = ({ control, name, label }) => {
 const styles = StyleSheet.create({
     container: {
         marginVertical: 10,
+        marginBottom: 30,
+    },
+    text: {
+        fontSize: 16,
+        padding: 10,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
     },
     label: {
         fontSize: 16,
-        fontWeight: 'bold',
+        marginBottom: 5,
+        color: '#333',
     },
 });
 

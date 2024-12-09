@@ -36,7 +36,7 @@ const AddBudgetScreen = () => {
             Alert.alert('Budget saved successfully');
 
             setTimeout(() => {
-                router.replace('/budget');
+                router.replace('/home');
             }, 2000);
 
         } catch (error) {

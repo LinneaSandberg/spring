@@ -63,21 +63,20 @@ export const InputField: React.FC<InputFieldProps> = ({
 
 const styles = StyleSheet.create({
     input: {
-        height: 40,
-        borderColor: '#ccc',
-        backgroundColor: '#F3F3F3',
-        borderRadius: 10,
+        fontSize: 16,
+        padding: 10,
         borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
         marginBottom: 15,
-        paddingLeft: 8,
     },
     inputFocused: {
         borderColor: 'blue',
     },
     label: {
+        fontSize: 16,
         marginBottom: 5,
-        marginLeft: 8,
-        fontWeight: 'bold',
+        color: '#333',
     },
     error: {
         color: 'red',

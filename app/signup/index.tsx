@@ -16,8 +16,7 @@ const RegisterScreen = () => {
             await createUserInFirestore(newUser.user.uid, data.email, data.name);
 
             await login(data.email, data.password);
-            alert('User registered successfully');
-            router.push('/home');
+            router.push('/welcome');
 
         } catch (error) {
             if (error instanceof FirebaseError) {

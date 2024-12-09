@@ -26,7 +26,6 @@ const LoginScreen = () => {
 
     try {
       await login(data.email, data.password);
-      alert("Login successful");
       router.push("/home");
 
     } catch (error) {

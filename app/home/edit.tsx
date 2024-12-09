@@ -15,7 +15,7 @@ const EditBudgetScreen = () => {
     const params = useSearchParams();
     const month = parseInt(params.get('month') || "1");
     const year = parseInt(params.get('year') || new Date().getFullYear().toString());
-    const { budget, error: budgetError, loading: budgetLoading } = useBudget(month, year);
+    const { budget, loading: budgetLoading } = useBudget(month, year);
     const router = useRouter();
 
     const updateMonthlyBudget = async (data: BudgetFormValues) => {
@@ -39,7 +39,7 @@ const EditBudgetScreen = () => {
             Alert.alert("Success", "Budget updated successfully!");
 
             setTimeout(() => {
-                router.replace('/budget');
+                router.replace('/home');
             }, 2000);
 
         } catch (error) {
@@ -54,10 +54,6 @@ const EditBudgetScreen = () => {
     };
 
     if (budgetLoading) return <LoadingSpinner />;
-
-    if (budgetError) {
-        return <Text>Error: {budgetError.message}</Text>;
-    }
 
     if (!budget) {
         return <Text>No budget found for this month.</Text>;

@@ -5,9 +5,10 @@ import { BudgetFormValues } from '@/types/Budget.types';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { budgetSchema } from '@/validation/yupValidation';
 import { InputField } from '../InputField';
+import { DocumentData } from 'firebase/firestore';
 
 interface BudgetFormProps {
-    initialValues?: BudgetFormValues;
+    initialValues?: DocumentData;
     onSubmit: (data: BudgetFormValues) => Promise<void>;
 }
 

@@ -1,7 +1,7 @@
 import { firebaseTimestampToString } from "@/helpers/time";
 import { VariableExpense } from "@/types/Budget.types";
 import { MaterialIcons } from "@expo/vector-icons";
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 
 interface ExpenseListItemProps {

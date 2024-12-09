@@ -1,10 +1,11 @@
 import { MaterialIcons } from '@expo/vector-icons';
-import { Budget, Expenses } from "@/types/Budget.types";
+import { Expenses } from "@/types/Budget.types";
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { DocumentData } from 'firebase/firestore';
 
 interface BudgetCardProps {
-    budget: Budget;
+    budget: DocumentData;
 }
 
 const BudgetCard: React.FC<BudgetCardProps> = ({ budget }) => {
