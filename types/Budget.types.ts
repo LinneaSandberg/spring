@@ -15,7 +15,7 @@ export interface Budget {
   year: number;
   totalIncome: number;
   fixedExpenses: Expenses;
-  remaningBalance: number;
+  remainingBalance: number;
   plannedExpenses: number | undefined;
   plannedSaving: number | undefined;
   amountAfterBudgetting: number;
@@ -33,7 +33,7 @@ export interface BudgetFormValues {
   year: number;
   totalIncome: number;
   fixedExpenses: Expenses;
-  remaningBalance: number;
+  remainingBalance: number;
   plannedExpenses?: number;
   plannedSaving?: number;
 }

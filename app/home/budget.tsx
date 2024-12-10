@@ -1,6 +1,9 @@
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { ThemedText } from "@/components/ThemedText";
+import { pink } from "@/constants/Colors";
 import useBudget from "@/hooks/useBudget";
+import { Expenses } from "@/types/Budget.types";
+import { MaterialIcons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
@@ -10,6 +13,15 @@ const BudgetScreen = () => {
     const currentMonth = currentDate.getMonth() + 1;
     const currentYear = currentDate.getFullYear();
     const { budget, loading: budgetLoading } = useBudget(currentMonth, currentYear);
+
+    const renderExpenses = (expenses: Expenses) => {
+        return Object.entries(expenses).map(([key, value]) => (
+            <View key={key} style={styles.expenseItem}>
+                <MaterialIcons name="attach-money" size={20} color="black" />
+                <ThemedText type='default' style={styles.color}>{key.charAt(0).toUpperCase() + key.slice(1)}: {value}</ThemedText>
+            </View>
+        ));
+    };
 
     useEffect(() => {
     }, [budget]);
@@ -31,28 +43,51 @@ const BudgetScreen = () => {
 
     return (
         <View style={styles.container}>
-            <ThemedText>{currentDate.toLocaleString('default', { month: 'long' })}</ThemedText>
+            <View style={styles.card}>
+                <ThemedText type='title'>Budget for {budget.month}/{budget.year}</ThemedText>
 
-            <View style={styles.wrapper}>
-                <View style={styles.sumBox}>
-                    <ThemedText>{budget.remaningBalance}</ThemedText>
-                    <ThemedText>{budget.plannedExpenses}</ThemedText>
-                    <ThemedText>{budget.plannedSaving}</ThemedText>
+                <View style={styles.summary}>
+                    <ThemedText style={styles.color}>Total income: {budget.totalIncome}</ThemedText>
+                    <ThemedText style={styles.color}>Remaining balance: {budget.remainingBalance}</ThemedText>
+                    {budget.amountAfterBudgetting > 0 && (
+                        <ThemedText style={styles.color}>Amount after budgeting: {budget.amountAfterBudgetting}</ThemedText>
+                    )}
+                    {budget.plannedExpenses !== undefined && (
+                        <ThemedText style={styles.color}>Planned expenses: {budget.plannedExpenses}</ThemedText>
+                    )}
+                    {budget.plannedSaving !== undefined && (
+                        <ThemedText style={styles.color}>Planned savings: {budget.plannedSaving}</ThemedText>
+                    )}
                 </View>
-                <View style={styles.buttomBox}>
-                    <Link style={styles.button} href={`/home/edit?month=${currentMonth}&year=${currentYear}`}>
-                        <ThemedText style={styles.buttonText}>Update Budget</ThemedText>
-                    </Link>
-                </View>
+
+                {budget.fixedExpenses && (
+                    <View style={styles.expenseSection}>
+                        <ThemedText style={styles.sectionTitle}>Fixed Expenses</ThemedText>
+                        {Object.keys(budget.fixedExpenses).length > 0
+                            ? renderExpenses(budget.fixedExpenses)
+                            : <ThemedText style={styles.emptyText}>No fixed expenses found.</ThemedText>
+                        }
+                    </View>
+                )}
+
+                {budget.variableExpenses && budget.variableExpenses.expenses.length > 0 && (
+                    <View style={styles.expenseSection}>
+                        <ThemedText type="miniText" style={[styles.color, styles.smalMar]}>Amount spent throughout the month{" "}
+                            <ThemedText type="miniBold">{budget.variableExpenses.totalSum}</ThemedText>
+                        </ThemedText>
+                        <ThemedText type="miniText" style={[styles.color, styles.smalMar]}>Money left to spend{" "}
+                            <ThemedText type="miniBold">{budget.remainingBalance - budget.variableExpenses.totalSum}</ThemedText>
+                        </ThemedText>
+
+                    </View>
+                )}
             </View>
-            {/* <View style={styles.box}>
-                <ThemedText>Budget Screen</ThemedText>
-            </View> */}
+            <Link href={"/home"} style={styles.button}>
+                <ThemedText type='defaultSemiBold' style={styles.buttonText}>Back to Overview</ThemedText>
+            </Link>
         </View>
     );
 };
-
-export default BudgetScreen;
 
 const styles = StyleSheet.create({
     container: {
@@ -61,27 +96,63 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 20,
     },
-    wrapper: {
-        display: 'flex',
+    card: {
+        padding: 40,
+        backgroundColor: pink,
+        borderRadius: 8,
+        marginBottom: 20,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 16,
+    },
+    summary: {
+        marginBottom: 20,
+    },
+    smalMar: {
+        marginBottom: 8,
+    },
+    expenseSection: {
+        marginTop: 10,
+    },
+    sectionTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 8,
+    },
+    expenseItem: {
         flexDirection: 'row',
-        backgroundColor: '#B3DAAB',
-        width: '100%',
+        alignItems: 'center',
+        marginVertical: 5,
     },
-    sumBox: {
-        width: "70%",
-        height: 100,
-        margin: 10,
-    },
-    buttomBox: {
-        width: "30%",
-        height: 100,
+    emptyText: {
+        fontStyle: 'italic',
+        color: '#888',
     },
     button: {
-        backgroundColor: '#FFD700',
-        padding: 10,
+        width: '100%',
+        backgroundColor: '#D8BCEF',
+        borderColor: '#1E1E1E',
+        borderWidth: 1,
+        padding: 20,
         borderRadius: 10,
     },
     buttonText: {
-        color: 'white',
+        textAlign: 'center',
+        color: '#1E1E1E',
+    },
+    color: {
+        color: '#1E1E1E',
     }
 });
+
+export default BudgetScreen;

@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-    View,
-    Modal,
-    StyleSheet,
-    TouchableOpacity,
-    Switch,
-    TouchableWithoutFeedback,
-    Keyboard,
-    KeyboardAvoidingView
-} from 'react-native';
+import { View, Modal, StyleSheet, TouchableOpacity, Switch, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { ExpenseFormValues, VariableExpense } from '@/types/Budget.types';
 import { yupResolver } from '@hookform/resolvers/yup';

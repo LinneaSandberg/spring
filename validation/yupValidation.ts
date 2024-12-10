@@ -42,7 +42,7 @@ export const budgetSchema = Yup.object({
     healthAndWellness: createNumberField(),
     entertainment: createNumberField(),
   }).required(),
-  remaningBalance: Yup.number().required(),
+  remainingBalance: Yup.number().required(),
   plannedExpenses: Yup.number().optional(),
   plannedSaving: Yup.number().optional(),
 }).required();

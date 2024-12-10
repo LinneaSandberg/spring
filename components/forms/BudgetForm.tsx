@@ -32,7 +32,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ initialValues, onSubmit }) => {
                 healthAndWellness: 0,
                 entertainment: 0,
             },
-            remaningBalance: 0,
+            remainingBalance: 0,
             plannedExpenses: undefined,
             plannedSaving: undefined,
         },

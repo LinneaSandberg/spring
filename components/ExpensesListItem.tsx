@@ -16,9 +16,9 @@ const ExpenseListItem: React.FC<ExpenseListItemProps> = ({ expense }) => {
 
     return (
         <View style={styles.expenseItem}>
-            <ThemedText type="miniText">
+            <ThemedText type="miniText" style={styles.color}>
                 {day} {monthName} - {expense.description}{' '}
-                <ThemedText type="miniBold">{expense.amount}</ThemedText>
+                <ThemedText type="miniBold" style={styles.color}>{expense.amount}</ThemedText>
             </ThemedText>
         </View>
     );
@@ -29,6 +29,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'flex-start',
         marginVertical: 5,
+        marginHorizontal: 10,
+    },
+    color: {
+        color: '#1E1E1E',
     }
 });
 

@@ -4,7 +4,7 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { DocumentData } from 'firebase/firestore';
 import { Months } from '@/enum/monthEnum';
-import { ThemedText } from '../ThemedText';
+import { ThemedText } from './ThemedText';
 
 interface BudgetCardProps {
     budget: DocumentData;
@@ -17,10 +17,10 @@ const SmallBudgetCard: React.FC<BudgetCardProps> = ({ budget }) => {
     const renderExpenses = (expenses: Expenses) => {
         return Object.entries(expenses).map(([key, value]) => (
             <View key={key} style={styles.expenseItem}>
-                <MaterialIcons name="attach-money" size={20} color="black" />
-                <ThemedText type='miniText'>
+                <MaterialIcons name="attach-money" size={18} color="black" />
+                <ThemedText style={styles.color} type='miniText'>
                     {key.replace(/([A-Z])/g, ' $1').trim()} {' '}
-                    <ThemedText type='miniBold'>{value}</ThemedText>
+                    <ThemedText style={styles.color} type='miniBold'>{value}</ThemedText>
                 </ThemedText>
             </View>
         ));
@@ -28,29 +28,29 @@ const SmallBudgetCard: React.FC<BudgetCardProps> = ({ budget }) => {
 
     return (
         <View style={styles.card}>
-            <ThemedText type='subtitle'>{monthName} Budget</ThemedText>
+            <ThemedText style={[styles.color, styles.margin]} type='subtitle'>{monthName} Budget</ThemedText>
 
             <View style={styles.boxes}>
                 <View style={styles.summary}>
                     <View style={styles.summaryItem}>
-                        <ThemedText type='miniText'>Total income</ThemedText>
-                        <ThemedText type='default'>{budget.totalIncome}</ThemedText>
+                        <ThemedText style={styles.color} type='miniText'>Total income</ThemedText>
+                        <ThemedText style={styles.color} type='default'>{budget.totalIncome}</ThemedText>
                     </View>
                     <View style={styles.summaryItem}>
-                        <ThemedText type='miniText'>Remaining balance</ThemedText>
-                        <ThemedText type='default'>{budget.remaningBalance}</ThemedText>
+                        <ThemedText style={styles.color} type='miniText'>Remaining balance</ThemedText>
+                        <ThemedText style={styles.color} type='default'>{budget.remainingBalance}</ThemedText>
                     </View>
                     {budget.amountAfterBudgetting > 0 && (
                         <View style={styles.summaryItem}>
-                            <ThemedText type='miniText'>Amount after budgeting</ThemedText>
-                            <ThemedText type='default'>{budget.amountAfterBudgetting}</ThemedText>
+                            <ThemedText style={styles.color} type='miniText'>Left after budgeting</ThemedText>
+                            <ThemedText style={styles.color} type='default'>{budget.amountAfterBudgetting}</ThemedText>
                         </View>
                     )}
                 </View>
 
                 {budget.fixedExpenses && (
                     <View style={styles.expenseSection}>
-                        <ThemedText type='default'>Fixed Expenses</ThemedText>
+                        <ThemedText style={styles.color} type='default'>Fixed Expenses</ThemedText>
                         {Object.keys(budget.fixedExpenses).length > 0
                             ? renderExpenses(budget.fixedExpenses)
                             : <ThemedText type='miniText'>No fixed expenses found.</ThemedText>
@@ -69,14 +69,6 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         padding: 20,
         marginBottom: 10,
-        // shadowColor: '#000',
-        // shadowOffset: {
-        //     width: 0,
-        //     height: 2,
-        // },
-        // shadowOpacity: 0.25,
-        // shadowRadius: 3.84,
-        // elevation: 5,
     },
     boxes: {
         display: 'flex',
@@ -106,6 +98,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginVertical: 5,
     },
+    color: {
+        color: '#1E1E1E',
+    },
+    margin: {
+        marginBottom: 10,
+    }
 });
 
 export default SmallBudgetCard;
