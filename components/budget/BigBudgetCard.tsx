@@ -1,39 +1,40 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { Expenses } from "@/types/Budget.types";
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { DocumentData } from 'firebase/firestore';
+import { ThemedText } from '../ThemedText';
 
 interface BudgetCardProps {
     budget: DocumentData;
 }
 
-const BudgetCard: React.FC<BudgetCardProps> = ({ budget }) => {
+const BigBudgetCard: React.FC<BudgetCardProps> = ({ budget }) => {
     const renderExpenses = (expenses: Expenses) => {
         return Object.entries(expenses).map(([key, value]) => (
             <View key={key} style={styles.expenseItem}>
                 <MaterialIcons name="attach-money" size={20} color="black" />
-                <Text style={styles.expenseText}>{key.charAt(0).toUpperCase() + key.slice(1)}: {value}</Text>
+                <ThemedText style={styles.expenseText}>{key.charAt(0).toUpperCase() + key.slice(1)}: {value}</ThemedText>
             </View>
         ));
     };
 
     return (
         <View style={styles.card}>
-            <Text style={styles.title}>Budget for {budget.month}/{budget.year}</Text>
+            <ThemedText style={styles.title}>Budget for {budget.month}/{budget.year}</ThemedText>
 
             <View style={styles.summary}>
-                <Text>Total income: {budget.totalIncome}</Text>
-                <Text>Remaining balance: {budget.remaningBalance}</Text>
-                {budget.amountAfterBudgetting > 0 && <Text>Amount after budgeting: {budget.amountAfterBudgetting}</Text>}
+                <ThemedText>Total income: {budget.totalIncome}</ThemedText>
+                <ThemedText>Remaining balance: {budget.remaningBalance}</ThemedText>
+                {budget.amountAfterBudgetting > 0 && <ThemedText>Amount after budgeting: {budget.amountAfterBudgetting}</ThemedText>}
             </View>
 
             {budget.fixedExpenses && (
                 <View style={styles.expenseSection}>
-                    <Text style={styles.sectionTitle}>Fixed Expenses</Text>
+                    <ThemedText style={styles.sectionTitle}>Fixed Expenses</ThemedText>
                     {Object.keys(budget.fixedExpenses).length > 0
                         ? renderExpenses(budget.fixedExpenses)
-                        : <Text style={styles.emptyText}>No fixed expenses found.</Text>
+                        : <ThemedText style={styles.emptyText}>No fixed expenses found.</ThemedText>
                     }
                 </View>
             )}
@@ -43,7 +44,6 @@ const BudgetCard: React.FC<BudgetCardProps> = ({ budget }) => {
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: '#FFFFFF',
         borderRadius: 15,
         padding: 20,
         marginBottom: 10,
@@ -97,5 +97,5 @@ const styles = StyleSheet.create({
 });
 
 
-export default BudgetCard;
+export default BigBudgetCard;
 

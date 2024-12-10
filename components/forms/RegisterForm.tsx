@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { RegisterInfo } from '@/types/Auth.types';
 import LoadingSpinner from '../LoadingSpinner';
 import { InputField } from '../InputField';
 import { registrationSchema } from '@/validation/yupValidation';
+import { ThemedText } from '../ThemedText';
 
 interface RegisterFormProps {
     onRegister: SubmitHandler<RegisterInfo>;
@@ -35,7 +36,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Register an account</Text>
+            <View style={styles.titlePosition}>
+                <ThemedText type='subtitle'>Register an account</ThemedText>
+            </View>
 
             <InputField
                 control={control}
@@ -77,9 +80,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
                 onPress={handleSubmit(onSubmitRegistration)}
                 disabled={isRegistering}
             >
-                <Text style={styles.buttonText}>
+                <ThemedText type='defaultSemiBold'>
                     {isRegistering ? "Registering..." : "Register"}
-                </Text>
+                </ThemedText>
             </TouchableOpacity>
 
             {isRegistering && <LoadingSpinner />}
@@ -95,30 +98,23 @@ const styles = StyleSheet.create({
         padding: 20,
         boxSizing: 'border-box',
     },
-    title: {
-        fontSize: 30,
+    titlePosition: {
         marginBottom: 20,
-        textAlign: 'center',
-        color: '#1E1E1E',
+        display: 'flex',
+        alignItems: 'center',
     },
     button: {
-        fontSize: 22,
-        fontWeight: 'semibold',
-        textAlign: 'center',
         marginBottom: 10,
         backgroundColor: '#FDD848',
         borderColor: '#1E1E1E',
         borderWidth: 1,
         padding: 20,
         borderRadius: 10,
+        display: 'flex',
+        alignItems: 'center',
     },
     buttonDisabled: {
         backgroundColor: '#A9A9A9',
-    },
-    buttonText: {
-        color: '#1E1E1E',
-        fontSize: 18,
-        textAlign: 'center',
     },
 });
 

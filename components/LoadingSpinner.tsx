@@ -1,10 +1,9 @@
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 
 const LoadingSpinner = () => {
     return (
         <View style={styles.container}>
-            <ActivityIndicator size="large" color="#0b4e33" />
-            <Text style={styles.title}>Loading...</Text>
+            <ActivityIndicator size="large" color="#B3DAAB" />
         </View>
     );
 };
@@ -15,11 +14,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 20,
     },
-    title: {
-        marginTop: 20,
-        textAlign: "center",
-        fontSize: 20,
-    }
 });
 
 export default LoadingSpinner;

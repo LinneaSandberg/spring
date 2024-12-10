@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import DateTimePicker from 'react-native-ui-datepicker';
 import dayjs from 'dayjs';
 import { Controller } from 'react-hook-form';
+import { ThemedText } from './ThemedText';
 
 interface DatePickerProps {
     control: any;
@@ -16,10 +17,9 @@ const DatePicker: React.FC<DatePickerProps> = ({ control, name, label }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.label}>{label}</Text>
-
-            <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-                <Text style={styles.text}>{date.format('YYYY-MM-DD')}</Text>
+            <ThemedText type='default'>{label}</ThemedText>
+            <TouchableOpacity style={styles.button} onPress={() => setShowDatePicker(true)}>
+                <ThemedText type='miniText'>{date.format('YYYY-MM-DD')}</ThemedText>
             </TouchableOpacity>
 
             {showDatePicker && (
@@ -51,12 +51,12 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         marginBottom: 30,
     },
-    text: {
+    button: {
         fontSize: 16,
         padding: 10,
         borderWidth: 1,
         borderColor: '#ccc',
-        borderRadius: 5,
+        borderRadius: 10,
     },
     label: {
         fontSize: 16,

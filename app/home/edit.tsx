@@ -8,7 +8,8 @@ import { useSearchParams } from "expo-router/build/hooks";
 import { useRouter } from "expo-router";
 import { FirebaseError } from "firebase/app";
 import { collection, doc, serverTimestamp, Timestamp, updateDoc } from "firebase/firestore";
-import { Alert, Text } from "react-native";
+import { Alert } from "react-native";
+import { ThemedText } from "@/components/ThemedText";
 
 const EditBudgetScreen = () => {
     const { currentUser } = useAuth();
@@ -56,7 +57,7 @@ const EditBudgetScreen = () => {
     if (budgetLoading) return <LoadingSpinner />;
 
     if (!budget) {
-        return <Text>No budget found for this month.</Text>;
+        return <ThemedText>No budget found for this month.</ThemedText>;
     }
 
     return <BudgetForm onSubmit={updateMonthlyBudget} initialValues={budget} />;

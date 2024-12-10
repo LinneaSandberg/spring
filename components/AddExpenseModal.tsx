@@ -1,11 +1,9 @@
 import React from 'react';
 import {
     View,
-    Text,
     Modal,
     StyleSheet,
     TouchableOpacity,
-    TextInput,
     Switch,
     TouchableWithoutFeedback,
     Keyboard,
@@ -18,6 +16,8 @@ import DatePicker from './DatePicker';
 import { expenseSchema } from '@/validation/yupValidation';
 import { Timestamp } from 'firebase/firestore';
 import { FontAwesome } from '@expo/vector-icons';
+import { InputField } from './InputField';
+import { ThemedText } from './ThemedText';
 
 interface AddExpenseModalProps {
     visible: boolean;
@@ -61,49 +61,35 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
     return (
         <Modal visible={visible} animationType="slide">
             <View style={styles.modalContainer}>
-                <Text style={styles.modalTitle}>Add Expense</Text>
+                <View style={styles.titlePosition}>
+                    <ThemedText type='subtitle'>Add Expense</ThemedText>
+                </View>
+
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <KeyboardAvoidingView style={styles.modalContainer} behavior="padding">
                         <View style={styles.contentContainer}>
+
                             <DatePicker control={control} name="date" label="Pick a date for the expense" />
-                            <View style={styles.inputContainer}>
-                                <Text style={styles.inputLabel}>Description</Text>
-                                <Controller
-                                    control={control}
-                                    name="description"
-                                    render={({ field: { onChange, value } }) => (
-                                        <TextInput
-                                            style={styles.input}
-                                            placeholder="Description"
-                                            onChangeText={onChange}
-                                            value={value}
-                                        />
-                                    )}
-                                />
-                                {errors.description && <Text style={[styles.error, styles.errorMargin]}>{errors.description.message}</Text>}
-                            </View>
 
-                            <View style={styles.inputContainer}>
-                                <Text style={styles.inputLabel}>Amount</Text>
-                                <Controller
-                                    control={control}
-                                    name="amount"
-                                    render={({ field: { onChange, value } }) => (
-                                        <TextInput
-                                            style={styles.input}
-                                            placeholder="Amount"
-                                            keyboardType="numeric"
-                                            onChangeText={(text) => onChange(parseFloat(text) || 0)}
-                                            value={value.toString()}
-                                        />
-                                    )}
-                                />
-                                {errors.amount && <Text style={[styles.error, styles.errorMargin]}>{errors.amount.message}</Text>}
-                            </View>
+                            <InputField
+                                control={control}
+                                name="description"
+                                label="Description"
+                                placeholder="Description"
+                                error={errors.description?.message}
+                            />
 
+                            <InputField
+                                control={control}
+                                name="amount"
+                                label="Amount"
+                                placeholder="Amount"
+                                keyboardType="numeric"
+                                error={errors.amount?.message}
+                            />
 
                             <View style={styles.switchContainer}>
-                                <Text style={styles.switchLabel}>Unecessary</Text>
+                                <ThemedText type='miniBold'>Unecessary</ThemedText>
                                 <Controller
                                     control={control}
                                     name="necessary"
@@ -111,27 +97,26 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
                                         <Switch
                                             value={value}
                                             onValueChange={onChange}
-                                            trackColor={{ false: "#767577", true: "#81b0ff" }}
-                                            thumbColor={value ? "#f5dd4b" : "#f4f3f4"}
+                                            trackColor={{ false: "#767577", true: "#9AB2D4" }}
+                                            thumbColor={value ? "#FDD848" : "#f4f3f4"}
                                         />
                                     )}
                                 />
-                                <Text style={styles.switchLabel}>Necessary</Text>
+                                <ThemedText type='miniBold'>Necessary</ThemedText>
                             </View>
 
                             <View style={styles.modalButtons}>
                                 <TouchableOpacity style={styles.modalButton} onPress={handleSubmit(onSubmitForm)}>
-                                    <Text style={styles.modalButtonText}>
+                                    <ThemedText type='defaultSemiBold'>
                                         <FontAwesome name="save" size={16} color="black" /> Save
-                                    </Text>
+                                    </ThemedText>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={styles.modalButton} onPress={onClose}>
-                                    <Text style={styles.modalButtonText}>
+                                    <ThemedText type='defaultSemiBold'>
                                         <FontAwesome name="close" size={16} color="black" /> Cancel
-                                    </Text>
+                                    </ThemedText>
                                 </TouchableOpacity>
-
                             </View>
                         </View>
                     </KeyboardAvoidingView>
@@ -145,15 +130,14 @@ const styles = StyleSheet.create({
     modalContainer: {
         flex: 1,
         paddingTop: 40,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: "#FFF7F7",
         paddingHorizontal: 20,
     },
-    modalTitle: {
-        marginTop: 100,
-        fontSize: 28,
+    titlePosition: {
+        marginTop: 60,
         marginBottom: 20,
-        fontWeight: 'bold',
-        textAlign: 'center',
+        display: 'flex',
+        alignItems: 'center',
     },
     contentContainer: {
         flex: 1,
@@ -198,11 +182,6 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 5,
-    },
-    modalButtonText: {
-        color: 'black',
-        fontSize: 16,
-        fontWeight: 'bold',
     },
     error: {
         color: 'red',

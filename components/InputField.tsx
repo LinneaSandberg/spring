@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, TextInput, Text, StyleSheet, KeyboardTypeOptions } from 'react-native';
+import { View, TextInput, StyleSheet, KeyboardTypeOptions } from 'react-native';
 import { Controller } from 'react-hook-form';
+import { ThemedText } from './ThemedText';
 
 interface InputFieldProps {
     control: any;
@@ -35,7 +36,7 @@ export const InputField: React.FC<InputFieldProps> = ({
 
     return (
         <View>
-            <Text style={styles.label}>{label}</Text>
+            <ThemedText type='default'>{label}</ThemedText>
             <Controller
                 control={control}
                 name={name}
@@ -56,7 +57,7 @@ export const InputField: React.FC<InputFieldProps> = ({
                     />
                 )}
             />
-            {error && <Text style={[styles.error, styles.errorMargin]}>{error}</Text>}
+            {error && <ThemedText style={[styles.error, styles.errorMargin]}>{error}</ThemedText>}
         </View>
     );
 };
@@ -67,16 +68,11 @@ const styles = StyleSheet.create({
         padding: 10,
         borderWidth: 1,
         borderColor: '#ccc',
-        borderRadius: 5,
+        borderRadius: 10,
         marginBottom: 15,
     },
     inputFocused: {
-        borderColor: 'blue',
-    },
-    label: {
-        fontSize: 16,
-        marginBottom: 5,
-        color: '#333',
+        borderColor: '#1E1E1E',
     },
     error: {
         color: 'red',

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { LoginInfo } from "@/types/Auth.types";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Link, useRouter } from "expo-router";
@@ -8,6 +8,7 @@ import { FirebaseError } from "firebase/app";
 import { loginSchema } from "@/validation/yupValidation";
 import { InputField } from "@/components/InputField";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { ThemedText } from "@/components/ThemedText";
 
 const LoginScreen = () => {
   const { login } = useAuth();
@@ -52,7 +53,9 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <View style={styles.titlePosition}>
+        <ThemedText type='subtitle'>Login</ThemedText>
+      </View>
 
       <InputField
         control={control}
@@ -77,9 +80,9 @@ const LoginScreen = () => {
         onPress={handleSubmit(onLogin)}
         disabled={isLoggingIn}
       >
-        <Text style={styles.buttonText}>
+        <ThemedText type='defaultSemiBold'>
           {isLoggingIn ? "Logging in..." : "Login"}
-        </Text>
+        </ThemedText>
       </TouchableOpacity>
 
       <Link style={styles.registerLink} href="/login/forgot">
@@ -98,30 +101,23 @@ const styles = StyleSheet.create({
     padding: 20,
     boxSizing: 'border-box',
   },
-  title: {
-    fontSize: 30,
+  titlePosition: {
     marginBottom: 20,
-    textAlign: 'center',
-    color: '#1E1E1E',
+    display: 'flex',
+    alignItems: 'center',
   },
   button: {
-    fontSize: 22,
-    fontWeight: 'semibold',
-    textAlign: 'center',
     marginBottom: 10,
     backgroundColor: '#D8BCEF',
     borderColor: '#1E1E1E',
     borderWidth: 1,
     padding: 20,
     borderRadius: 10,
+    display: 'flex',
+    alignItems: 'center',
   },
   buttonDisabled: {
     backgroundColor: '#A9A9A9',
-  },
-  buttonText: {
-    color: '#1E1E1E',
-    fontSize: 18,
-    textAlign: 'center',
   },
   registerLink: {
     color: '#1E1E1E',

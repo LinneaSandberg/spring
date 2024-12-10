@@ -33,6 +33,7 @@ export default function RootLayout() {
           <Stack.Screen name="signup/index" />
           <Stack.Screen name="welcome/index" />
           <Stack.Screen name="home/index" />
+          <Stack.Screen name="home/budget" />
           <Stack.Screen name="home/add" />
           <Stack.Screen name="home/edit" />
         </Stack>

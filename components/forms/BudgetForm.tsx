@@ -1,4 +1,4 @@
-import { Text, StyleSheet, TouchableOpacity, Alert, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, TouchableOpacity, Alert, ScrollView, KeyboardAvoidingView, View } from 'react-native';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import React, { useState } from 'react';
 import { BudgetFormValues } from '@/types/Budget.types';
@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { budgetSchema } from '@/validation/yupValidation';
 import { InputField } from '../InputField';
 import { DocumentData } from 'firebase/firestore';
+import { ThemedText } from '../ThemedText';
 
 interface BudgetFormProps {
     initialValues?: DocumentData;
@@ -59,9 +60,11 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ initialValues, onSubmit }) => {
                 keyboardShouldPersistTaps="handled"
                 contentContainerStyle={{ padding: 20 }}
             >
-                <Text style={styles.title}>Budget Tracker</Text>
 
-                <Text style={styles.subTitle}>Total income</Text>
+                <View style={styles.titlePosition}>
+                    <ThemedText type='subtitle'>Budget Tracker</ThemedText>
+                </View>
+
                 <InputField
                     placeholder='Total Income'
                     control={control}
@@ -72,7 +75,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ initialValues, onSubmit }) => {
                     error={errors.totalIncome?.message}
                 />
 
-                <Text style={styles.subTitle}>Fixed Expenses</Text>
+                <ThemedText style={styles.semiTitlePosition} type='defaultSemiBold'>Fixed Expenses</ThemedText>
                 <InputField
                     placeholder='Housing Costs'
                     control={control}
@@ -148,9 +151,9 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ initialValues, onSubmit }) => {
                     onPress={handleSubmit(onSubmitForm)}
                     disabled={isSubmitting}
                 >
-                    <Text style={styles.buttonText}>
+                    <ThemedText type='defaultSemiBold'>
                         {isSubmitting ? "Submitting..." : "Submit"}
-                    </Text>
+                    </ThemedText>
                 </TouchableOpacity>
             </ScrollView>
         </KeyboardAvoidingView >
@@ -165,36 +168,29 @@ const styles = StyleSheet.create({
         padding: 20,
         boxSizing: 'border-box',
     },
-    title: {
-        fontSize: 30,
+    titlePosition: {
         marginTop: 60,
-        marginBottom: 40,
-        textAlign: 'center',
-        color: '#1E1E1E',
+        marginBottom: 20,
+        display: 'flex',
+        alignItems: 'center',
     },
-    subTitle: {
-        fontSize: 20,
+    semiTitlePosition: {
+        textAlign: 'center',
+        marginTop: 20,
         marginBottom: 10,
-        fontWeight: '600',
-        color: '#1E1E1E',
     },
     button: {
-        marginTop: 20,
-        textAlign: 'center',
         marginBottom: 10,
-        backgroundColor: '#FFD700',
+        backgroundColor: '#FDD848',
         borderColor: '#1E1E1E',
         borderWidth: 1,
-        padding: 10,
+        padding: 20,
         borderRadius: 10,
+        display: 'flex',
+        alignItems: 'center',
     },
     buttonDisabled: {
         backgroundColor: '#A9A9A9',
-    },
-    buttonText: {
-        color: '#1E1E1E',
-        fontSize: 18,
-        textAlign: 'center',
     },
 });
 

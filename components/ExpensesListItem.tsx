@@ -1,8 +1,8 @@
 import { firebaseTimestampToString } from "@/helpers/time";
 import { VariableExpense } from "@/types/Budget.types";
-import { MaterialIcons } from "@expo/vector-icons";
-import React, { useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import { ThemedText } from "./ThemedText";
 
 interface ExpenseListItemProps {
     expense: VariableExpense;
@@ -16,8 +16,10 @@ const ExpenseListItem: React.FC<ExpenseListItemProps> = ({ expense }) => {
 
     return (
         <View style={styles.expenseItem}>
-            <MaterialIcons name="attach-money" size={20} color="black" />
-            <Text style={styles.expenseText}>{day} {monthName} - {expense.description}: {expense.amount} :-</Text>
+            <ThemedText type="miniText">
+                {day} {monthName} - {expense.description}{' '}
+                <ThemedText type="miniBold">{expense.amount}</ThemedText>
+            </ThemedText>
         </View>
     );
 }
@@ -25,13 +27,9 @@ const ExpenseListItem: React.FC<ExpenseListItemProps> = ({ expense }) => {
 const styles = StyleSheet.create({
     expenseItem: {
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         marginVertical: 5,
-    },
-    expenseText: {
-        fontSize: 16,
-        marginLeft: 10,
-    },
+    }
 });
 
 export default ExpenseListItem;

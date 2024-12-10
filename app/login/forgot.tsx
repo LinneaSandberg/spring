@@ -3,11 +3,12 @@ import { ResetPasswordInfo } from "@/types/Auth.types";
 import { FirebaseError } from "firebase/app";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet } from "react-native";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'expo-router';
 import { forgotPasswordSchema } from "@/validation/yupValidation";
 import { InputField } from "@/components/InputField";
+import { ThemedText } from "@/components/ThemedText";
 
 const ForgotPasswordScreen = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -52,7 +53,9 @@ const ForgotPasswordScreen = () => {
 
     return (
         <View style={styles.formContainer}>
-            <Text style={styles.title}>Forgot Password</Text>
+            <View style={styles.titlePosition}>
+                <ThemedText type='subtitle'>Forgot Password</ThemedText>
+            </View>
 
             <InputField
                 control={control}
@@ -68,18 +71,18 @@ const ForgotPasswordScreen = () => {
                 onPress={handleSubmit(onResetPassword)}
                 disabled={isSubmitting}
             >
-                <Text style={styles.buttonText}>
+                <ThemedText type='defaultSemiBold'>
                     {isSubmitting
                         ? "Submitting..."
                         : "Submit"
                     }
-                </Text>
+                </ThemedText>
             </TouchableOpacity>
 
             {isSuccess && (
-                <Text style={styles.successMessage}>
+                <ThemedText style={styles.successMessage}>
                     We have sent you an email with instructions to reset your password.
-                </Text>
+                </ThemedText>
             )}
         </View>
     );
@@ -93,29 +96,23 @@ const styles = StyleSheet.create({
         padding: 20,
         boxSizing: 'border-box',
     },
-    title: {
-        fontSize: 30,
+    titlePosition: {
         marginBottom: 20,
-        textAlign: 'center',
-        color: '#1E1E1E',
+        display: 'flex',
+        alignItems: 'center',
     },
     button: {
-        fontSize: 18,
-        textAlign: 'center',
         marginBottom: 10,
         backgroundColor: '#FDD848',
         borderColor: '#1E1E1E',
         borderWidth: 1,
         padding: 20,
         borderRadius: 10,
+        display: 'flex',
+        alignItems: 'center',
     },
     buttonDisabled: {
         backgroundColor: '#A9A9A9',
-    },
-    buttonText: {
-        color: '#1E1E1E',
-        fontSize: 16,
-        textAlign: 'center',
     },
     successMessage: {
         color: 'green',

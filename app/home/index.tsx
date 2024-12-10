@@ -1,7 +1,8 @@
 import AddExpenseModal from "@/components/AddExpenseModal";
-import BudgetCard from "@/components/BudgetCard";
+import SmallBudgetCard from "@/components/budget/SmallBudgetCard";
 import ExpenseListItem from "@/components/ExpensesListItem";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { ThemedText } from "@/components/ThemedText";
 import useBudget from "@/hooks/useBudget";
 import useUser from "@/hooks/useUser";
 import { db } from "@/services/firebase";
@@ -10,7 +11,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Alert } from "react-native";
 
 const HomeScreen = () => {
     const { data: userData, loading: userLoading } = useUser();
@@ -57,8 +58,8 @@ const HomeScreen = () => {
 
     if (!budget) {
         return (
-            <View style={styles.container}>
-                <Text style={styles.title}>No budget found, create one!</Text>
+            <View style={styles.titlePosition}>
+                <ThemedText type="title">No budget found, create one!</ThemedText>
                 <Link href={"/home/add"} style={styles.link}>
                     Add a budget
                 </Link>
@@ -68,32 +69,62 @@ const HomeScreen = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Hello, {userData?.name}</Text>
+            <View style={styles.titlePosition}>
+                <ThemedText type="title">Hello, {userData?.name}!</ThemedText>
+            </View>
 
             {budget ? (
                 <>
-                    <Link href={`/home/edit?month=${currentMonth}&year=${currentYear}`}>
-                        <MaterialIcons name="edit" size={20} />
-                        <Text>Update budget for {currentDate.toLocaleString('default', { month: 'long' })} {currentYear}</Text>
+                    <Link style={styles.button} href={`/home/edit?month=${currentMonth}&year=${currentYear}`}>
+                        <ThemedText style={styles.buttonText} type='defaultSemiBold'>Update {currentDate.toLocaleString('default', { month: 'long' })}'s Budget</ThemedText>
                     </Link>
 
-                    <TouchableOpacity onPress={handleAddExpense}>
-                        <MaterialIcons name="add" size={20} />
-                        <Text>Add Expense</Text>
+                    <Link href={"/home/budget"} style={styles.budgetLink}>
+                        <SmallBudgetCard budget={budget} />
+                    </Link>
+
+                    <View style={styles.boxes}>
+                        <View style={styles.nesExpenses}>
+                            <ThemedText type="defaultSemiBold">Necessarys</ThemedText>
+                            {budget.variableExpenses.expenses
+                                .filter((expense: VariableExpense) => expense.necessary)
+                                .reverse()
+                                .slice(0, 4)
+                                .reverse()
+                                .map((expense: VariableExpense, index: number) => (
+                                    <ExpenseListItem key={index} expense={expense} />
+                                ))}
+                        </View>
+
+                        <View style={styles.unExpenses}>
+                            <ThemedText type="defaultSemiBold">Unnecessary</ThemedText>
+                            {budget.variableExpenses.expenses
+                                .filter((expense: VariableExpense) => !expense.necessary)
+                                .reverse()
+                                .slice(0, 4)
+                                .reverse()
+                                .map((expense: VariableExpense, index: number) => (
+                                    <ExpenseListItem key={index} expense={expense} />
+                                ))}
+                        </View>
+                    </View>
+
+                    <TouchableOpacity style={styles.button} onPress={handleAddExpense}>
+                        <ThemedText type='defaultSemiBold'>Add Expense</ThemedText>
                     </TouchableOpacity>
 
-                    <BudgetCard budget={budget} />
+                    <View style={styles.savingBox}>
+                        <ThemedText type="defaultSemiBold">Saving Goal</ThemedText>
+                    </View>
 
-                    <ScrollView>
-                        {budget.variableExpenses.expenses.map((expense: VariableExpense, index: number) => (
-                            <ExpenseListItem key={index} expense={expense} />
-                        ))}
-                    </ScrollView>
+                    {/* <ScrollView>
+                        <SavingGoal budget={budget as Budget} />
+                    </ScrollView> */}
                 </>
             ) : (
                 <Link href={"/home/add"}>
                     <MaterialIcons name="add" size={20} />
-                    <Text>Create a budget for {currentDate.toLocaleString('default', { month: 'long' })} {currentYear}</Text>
+                    <ThemedText>Create a budget for {currentDate.toLocaleString('default', { month: 'long' })} {currentYear}</ThemedText>
                 </Link>
             )}
 
@@ -111,7 +142,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#fff',
+        boxSizing: 'border-box',
+    },
+    titlePosition: {
+        marginTop: 60,
+        marginBottom: 20,
+        display: 'flex',
+        alignItems: 'center',
     },
     title: {
         fontSize: 30,
@@ -129,15 +166,55 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 10,
     },
-    buttonText: {
-        color: '#1E1E1E',
-        fontSize: 18,
-        textAlign: 'center',
+    button: {
+        marginBottom: 10,
+        backgroundColor: '#D8BCEF',
+        borderColor: '#1E1E1E',
+        borderWidth: 1,
+        padding: 20,
+        borderRadius: 10,
+        display: 'flex',
+        alignItems: 'center',
     },
     view: {
         marginTop: 10,
         maxHeight: '70%',
     },
+    boxes: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        boxSizing: 'border-box',
+        marginBottom: 10,
+    },
+    nesExpenses: {
+        backgroundColor: '#9AB2D4',
+        borderRadius: 10,
+        width: '48%',
+        padding: 3,
+        marginBottom: 3,
+    },
+    unExpenses: {
+        backgroundColor: '#FDD848',
+        borderRadius: 10,
+        width: '48%',
+        padding: 3,
+        marginBottom: 3,
+    },
+    buttonDisabled: {
+        backgroundColor: '#A9A9A9',
+    },
+    buttonText: {
+        textAlign: 'center',
+    },
+    savingBox: {
+        backgroundColor: '#B3DAAB',
+        borderRadius: 10,
+        height: 100,
+    },
+    budgetLink: {
+        marginBottom: 10,
+    }
 });
 
 export default HomeScreen;
