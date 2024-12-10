@@ -62,7 +62,7 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
         <Modal visible={visible} animationType="slide">
             <View style={styles.modalContainer}>
                 <View style={styles.titlePosition}>
-                    <ThemedText type='subtitle'>Add Expense</ThemedText>
+                    <ThemedText style={styles.color} type='subtitle'>Add Expense</ThemedText>
                 </View>
 
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -89,7 +89,7 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
                             />
 
                             <View style={styles.switchContainer}>
-                                <ThemedText type='miniBold'>Unecessary</ThemedText>
+                                <ThemedText style={styles.color} type='miniBold'>Unecessary</ThemedText>
                                 <Controller
                                     control={control}
                                     name="necessary"
@@ -102,18 +102,18 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
                                         />
                                     )}
                                 />
-                                <ThemedText type='miniBold'>Necessary</ThemedText>
+                                <ThemedText style={styles.color} type='miniBold'>Necessary</ThemedText>
                             </View>
 
                             <View style={styles.modalButtons}>
                                 <TouchableOpacity style={styles.modalButton} onPress={handleSubmit(onSubmitForm)}>
-                                    <ThemedText type='defaultSemiBold'>
+                                    <ThemedText style={styles.color} type='defaultSemiBold'>
                                         <FontAwesome name="save" size={16} color="black" /> Save
                                     </ThemedText>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={styles.modalButton} onPress={onClose}>
-                                    <ThemedText type='defaultSemiBold'>
+                                    <ThemedText style={styles.color} type='defaultSemiBold'>
                                         <FontAwesome name="close" size={16} color="black" /> Cancel
                                     </ThemedText>
                                 </TouchableOpacity>
@@ -132,6 +132,9 @@ const styles = StyleSheet.create({
         paddingTop: 40,
         backgroundColor: "#FFF7F7",
         paddingHorizontal: 20,
+    },
+    color: {
+        color: '#333',
     },
     titlePosition: {
         marginTop: 60,

@@ -1,5 +1,6 @@
+import { ThemedText } from '@/components/ThemedText';
 import { Link } from 'expo-router';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 
 const NoBudgetInfo = () => {
     return (
@@ -9,29 +10,33 @@ const NoBudgetInfo = () => {
                 style={styles.image}
             />
 
-            <Text style={styles.title}>Welcome to BudgetWise!</Text>
-            <Text style={styles.description}>
+            <ThemedText type='subtitle'>Welcome to BudgetWise!</ThemedText>
+
+            <ThemedText type='default'>
                 It seems you haven't created a budget yet. Let's get started!
-            </Text>
+            </ThemedText>
 
-            <Text style={styles.sectionTitle}>How BudgetWise Works</Text>
+            <ThemedText type='defaultSemiBold'>How BudgetWise Works</ThemedText>
+
             <View style={styles.step}>
-                <Text style={styles.stepNumber}>1</Text>
-                <Text style={styles.stepText}>Create a monthly budget: Set your income and planned expenses.</Text>
-            </View>
-            <View style={styles.step}>
-                <Text style={styles.stepNumber}>2</Text>
-                <Text style={styles.stepText}>Track your spending: Add your expenses as you go.</Text>
-            </View>
-            <View style={styles.step}>
-                <Text style={styles.stepNumber}>3</Text>
-                <Text style={styles.stepText}>Stay on top of your finances: Monitor your spending and adjust your budget as needed.</Text>
+                <ThemedText type='defaultSemiBold'>1</ThemedText>
+                <ThemedText type='default'>Create a monthly budget: Set your income and planned expenses.</ThemedText>
             </View>
 
-            <Text style={styles.cta}>Ready to take control of your budget?</Text>
+            <View style={styles.step}>
+                <ThemedText type='defaultSemiBold'>2</ThemedText>
+                <ThemedText type='default'>Track your spending: Add your expenses as you go.</ThemedText>
+            </View>
 
-            <Link href="/home" style={styles.link}>
-                <Text style={styles.buttonText}>Go to Budget</Text>
+            <View style={styles.step}>
+                <ThemedText type='defaultSemiBold'>3</ThemedText>
+                <ThemedText type='default'>Stay on top of your finances: Monitor your spending and adjust your budget as needed.</ThemedText>
+            </View>
+
+            <ThemedText type='defaultSemiBold'>Ready to take control of your budget?</ThemedText>
+
+            <Link href="/home" style={styles.button}>
+                <ThemedText style={styles.buttonText} type='defaultSemiBold'>Go to Budget</ThemedText>
             </Link>
         </View>
     );
@@ -43,58 +48,27 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     image: {
-        width: 200,
+        width: 400,
         height: 200,
         marginBottom: 20,
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
-    description: {
-        fontSize: 16,
-        textAlign: 'center',
-
-        marginBottom:
-            20,
-    },
-    sectionTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 10,
     },
     step: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 10,
     },
-    stepNumber: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginRight: 10,
-    },
-    stepText: {
-        fontSize: 16,
-    },
-    cta: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginTop: 20,
-    },
-    link: {
-        textAlign: 'center',
+    button: {
         marginBottom: 10,
-        backgroundColor: '#FFD700',
+        backgroundColor: '#FDD848',
         borderColor: '#1E1E1E',
         borderWidth: 1,
-        padding: 10,
+        padding: 20,
         borderRadius: 10,
+        display: 'flex',
+        alignItems: 'center',
     },
     buttonText: {
         color: '#1E1E1E',
-        fontSize: 18,
-        textAlign: 'center',
     },
 });
 

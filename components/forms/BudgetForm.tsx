@@ -151,7 +151,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ initialValues, onSubmit }) => {
                     onPress={handleSubmit(onSubmitForm)}
                     disabled={isSubmitting}
                 >
-                    <ThemedText type='defaultSemiBold'>
+                    <ThemedText style={styles.buttonText} type='defaultSemiBold'>
                         {isSubmitting ? "Submitting..." : "Submit"}
                     </ThemedText>
                 </TouchableOpacity>
@@ -188,6 +188,9 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         display: 'flex',
         alignItems: 'center',
+    },
+    buttonText: {
+        color: '#1E1E1E',
     },
     buttonDisabled: {
         backgroundColor: '#A9A9A9',

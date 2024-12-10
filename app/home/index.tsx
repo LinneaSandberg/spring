@@ -7,7 +7,6 @@ import useBudget from "@/hooks/useBudget";
 import useUser from "@/hooks/useUser";
 import { db } from "@/services/firebase";
 import { VariableExpense } from "@/types/Budget.types";
-import { MaterialIcons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
@@ -56,24 +55,24 @@ const HomeScreen = () => {
         return <LoadingSpinner />;
     }
 
-    if (!budget) {
-        return (
-            <View style={styles.titlePosition}>
-                <ThemedText type="title">No budget found, create one!</ThemedText>
-                <Link href={"/home/add"} style={styles.link}>
-                    Add a budget
-                </Link>
-            </View>
-        );
-    }
-
     return (
         <View style={styles.container}>
             <View style={styles.titlePosition}>
                 <ThemedText type="title">Hello, {userData?.name}!</ThemedText>
             </View>
 
-            {budget ? (
+            {!budget && (
+                <View style={styles.titlePosition}>
+                    <ThemedText type="subtitle" style={styles.margin}>No budget found, create one!</ThemedText>
+                    <Link href={"/home/add"} style={styles.button}>
+                        <ThemedText style={styles.buttonText} type='defaultSemiBold'>
+                            Add a budget
+                        </ThemedText>
+                    </Link>
+                </View>
+            )}
+
+            {budget && (
                 <>
                     <Link style={styles.button} href={`/home/edit?month=${currentMonth}&year=${currentYear}`}>
                         <ThemedText style={styles.buttonText} type='defaultSemiBold'>Update {currentDate.toLocaleString('default', { month: 'long' })}'s Budget</ThemedText>
@@ -83,31 +82,32 @@ const HomeScreen = () => {
                         <SmallBudgetCard budget={budget} />
                     </Link>
 
-                    <View style={styles.boxes}>
-                        <View style={styles.nesExpenses}>
-                            <ThemedText type="defaultSemiBold">Necessarys</ThemedText>
-                            {budget.variableExpenses.expenses
-                                .filter((expense: VariableExpense) => expense.necessary)
-                                .reverse()
-                                .slice(0, 4)
-                                .reverse()
-                                .map((expense: VariableExpense, index: number) => (
-                                    <ExpenseListItem key={index} expense={expense} />
-                                ))}
-                        </View>
+                    {budget.variableExpenses > 0 &&
+                        (<View style={styles.boxes}>
+                            <View style={styles.nesExpenses}>
+                                <ThemedText type="defaultSemiBold">Necessarys</ThemedText>
+                                {budget.variableExpenses.expenses
+                                    .filter((expense: VariableExpense) => expense.necessary)
+                                    .reverse()
+                                    .slice(0, 4)
+                                    .reverse()
+                                    .map((expense: VariableExpense, index: number) => (
+                                        <ExpenseListItem key={index} expense={expense} />
+                                    ))}
+                            </View>
 
-                        <View style={styles.unExpenses}>
-                            <ThemedText type="defaultSemiBold">Unnecessary</ThemedText>
-                            {budget.variableExpenses.expenses
-                                .filter((expense: VariableExpense) => !expense.necessary)
-                                .reverse()
-                                .slice(0, 4)
-                                .reverse()
-                                .map((expense: VariableExpense, index: number) => (
-                                    <ExpenseListItem key={index} expense={expense} />
-                                ))}
-                        </View>
-                    </View>
+                            <View style={styles.unExpenses}>
+                                <ThemedText type="defaultSemiBold">Unnecessary</ThemedText>
+                                {budget.variableExpenses.expenses
+                                    .filter((expense: VariableExpense) => !expense.necessary)
+                                    .reverse()
+                                    .slice(0, 4)
+                                    .reverse()
+                                    .map((expense: VariableExpense, index: number) => (
+                                        <ExpenseListItem key={index} expense={expense} />
+                                    ))}
+                            </View>
+                        </View>)}
 
                     <TouchableOpacity style={styles.button} onPress={handleAddExpense}>
                         <ThemedText type='defaultSemiBold'>Add Expense</ThemedText>
@@ -121,11 +121,6 @@ const HomeScreen = () => {
                         <SavingGoal budget={budget as Budget} />
                     </ScrollView> */}
                 </>
-            ) : (
-                <Link href={"/home/add"}>
-                    <MaterialIcons name="add" size={20} />
-                    <ThemedText>Create a budget for {currentDate.toLocaleString('default', { month: 'long' })} {currentYear}</ThemedText>
-                </Link>
             )}
 
             <AddExpenseModal
@@ -206,6 +201,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         textAlign: 'center',
+        color: '#1E1E1E',
     },
     savingBox: {
         backgroundColor: '#B3DAAB',
@@ -214,6 +210,9 @@ const styles = StyleSheet.create({
     },
     budgetLink: {
         marginBottom: 10,
+    },
+    margin: {
+        marginBottom: 20,
     }
 });
 

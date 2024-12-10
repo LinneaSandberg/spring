@@ -86,7 +86,9 @@ const LoginScreen = () => {
       </TouchableOpacity>
 
       <Link style={styles.registerLink} href="/login/forgot">
-        Forgot your password?
+        <ThemedText type='default'>
+          Forgot your password?
+        </ThemedText>
       </Link>
 
     </View>
@@ -120,7 +122,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#A9A9A9',
   },
   registerLink: {
-    color: '#1E1E1E',
     textAlign: 'center',
     marginTop: 10,
   }

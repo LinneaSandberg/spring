@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, KeyboardTypeOptions } from 'react-native';
 import { Controller } from 'react-hook-form';
 import { ThemedText } from './ThemedText';
+import { useThemeColor } from '@/hooks/useThemeColor';
 
 interface InputFieldProps {
     control: any;
@@ -24,7 +25,10 @@ export const InputField: React.FC<InputFieldProps> = ({
     error,
     defaultValue
 }) => {
+    const textColor = useThemeColor({ light: 'black', dark: 'white' }, 'text');
+    const focusedBorderColor = useThemeColor({ light: '#1E1E1E', dark: 'white' }, 'text');
     const [isFocused, setIsFocused] = useState(false);
+
 
     const handleFocus = () => {
         setIsFocused(true);
@@ -44,7 +48,8 @@ export const InputField: React.FC<InputFieldProps> = ({
                     <TextInput
                         style={[
                             styles.input,
-                            isFocused && styles.inputFocused
+                            { color: textColor },
+                            isFocused && { borderColor: focusedBorderColor }
                         ]}
                         placeholder={placeholder}
                         keyboardType={keyboardType}
@@ -67,12 +72,9 @@ const styles = StyleSheet.create({
         fontSize: 16,
         padding: 10,
         borderWidth: 1,
-        borderColor: '#ccc',
+        borderColor: '#989898',
         borderRadius: 10,
         marginBottom: 15,
-    },
-    inputFocused: {
-        borderColor: '#1E1E1E',
     },
     error: {
         color: 'red',

@@ -27,6 +27,12 @@ const auth = initializeAuth(app, {
 
 export const db = getFirestore(app);
 
+/**
+ * The function `createCollection` creates a collection reference in Firestore with the specified name.
+ * @param {string} collectionName - The `collectionName` parameter is a string that represents the name
+ * of the collection in Firestore that you want to create or access.
+ * @returns A CollectionReference of type T is being returned.
+ */
 const createCollection = <T = DocumentData>(collectionName: string) => {
   return collection(db, collectionName) as CollectionReference<T>;
 };
@@ -34,6 +40,14 @@ const createCollection = <T = DocumentData>(collectionName: string) => {
 export const userCol = createCollection<User>("users");
 export const registerUserCol = createCollection<CreateUser>("users");
 
+/**
+ * The function `getUserBudgets` retrieves the budgets associated with a specific user from a database
+ * collection.
+ * @param {string} userId - The `userId` parameter is a string that represents the unique identifier of
+ * a user. It is used to retrieve the budgets associated with that specific user from the database.
+ * @returns The function `getUserBudgets` is returning a reference to the "budgets" collection for a
+ * specific user identified by the `userId` parameter.
+ */
 export const getUserBudgets = (userId: string) => {
   return collection(db, "users", userId, "budgets");
 };
