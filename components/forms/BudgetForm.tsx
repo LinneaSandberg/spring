@@ -140,7 +140,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ initialValues, onSubmit }) => {
                     placeholder='How much are you planning to save this month?'
                     control={control}
                     name="plannedSaving"
-                    label="Planned Saving"
+                    label="Saving goal"
                     keyboardType="numeric"
                     defaultValue={initialValues?.plannedSaving?.toString() || ''}
                     error={errors.plannedSaving?.message}

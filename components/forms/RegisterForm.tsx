@@ -34,6 +34,10 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
         }
     };
 
+    if (isRegistering) {
+        return <LoadingSpinner />;
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.titlePosition}>
@@ -84,8 +88,6 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
                     {isRegistering ? "Registering..." : "Register"}
                 </ThemedText>
             </TouchableOpacity>
-
-            {isRegistering && <LoadingSpinner />}
         </View>
     );
 };

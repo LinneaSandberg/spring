@@ -1,42 +1,59 @@
+import AnimatedText from '@/components/AnimatedText';
 import { ThemedText } from '@/components/ThemedText';
+import { purple } from '@/constants/Colors';
 import { Link } from 'expo-router';
 import { View, StyleSheet, Image } from 'react-native';
 
-const NoBudgetInfo = () => {
+const WelcomeScreen = () => {
     return (
         <View style={styles.container}>
-            <Image
-                source={require('../../assets/images/cloud.png')}
-                style={styles.image}
-            />
+            <AnimatedText text='Spring' />
 
-            <ThemedText type='subtitle'>Welcome to BudgetWise!</ThemedText>
+            <ThemedText type='defaultSemiBold' style={styles.subTitle}>Bring spring into your economy</ThemedText>
 
-            <ThemedText type='default'>
-                It seems you haven't created a budget yet. Let's get started!
-            </ThemedText>
-
-            <ThemedText type='defaultSemiBold'>How BudgetWise Works</ThemedText>
-
-            <View style={styles.step}>
-                <ThemedText type='defaultSemiBold'>1</ThemedText>
-                <ThemedText type='default'>Create a monthly budget: Set your income and planned expenses.</ThemedText>
+            <View style={styles.wrapper}>
+                <View style={styles.imageBox}>
+                    <Image
+                        source={require('../../assets/images/flower.jpeg')}
+                        style={styles.image}
+                    />
+                </View>
+                <View style={styles.step}>
+                    <ThemedText type='defaultSemiBold' style={styles.defaultSemiBold}>First</ThemedText>
+                    <ThemedText type='default' style={styles.text}>Create a personal budget and a saving goal for the month.</ThemedText>
+                </View>
             </View>
 
-            <View style={styles.step}>
-                <ThemedText type='defaultSemiBold'>2</ThemedText>
-                <ThemedText type='default'>Track your spending: Add your expenses as you go.</ThemedText>
+            <View style={styles.wrapper}>
+                <View style={styles.step}>
+                    <ThemedText type='defaultSemiBold' style={styles.defaultSemiBold}>& Then</ThemedText>
+                    <ThemedText style={styles.text}>Track your spendings with necessary and unecessary expenses.</ThemedText>
+                </View>
+                <View style={styles.imageBox}>
+                    <Image
+                        source={require('../../assets/images/flower.jpeg')}
+                        style={styles.image}
+                    />
+                </View>
             </View>
 
-            <View style={styles.step}>
-                <ThemedText type='defaultSemiBold'>3</ThemedText>
-                <ThemedText type='default'>Stay on top of your finances: Monitor your spending and adjust your budget as needed.</ThemedText>
+            <View style={styles.wrapper}>
+                <View style={styles.imageBox}>
+                    <Image
+                        source={require('../../assets/images/flower.jpeg')}
+                        style={styles.image}
+                    />
+                </View>
+                <View style={styles.step}>
+                    <ThemedText type='defaultSemiBold' style={styles.defaultSemiBold}>Finally</ThemedText>
+                    <ThemedText style={styles.text}>Increase awareness of your spending habits will help you achieve your savings goals.</ThemedText>
+                </View>
             </View>
 
-            <ThemedText type='defaultSemiBold'>Ready to take control of your budget?</ThemedText>
+            <ThemedText type='miniBold' style={styles.miniText}>Ready to take control of your economy?</ThemedText>
 
             <Link href="/home" style={styles.button}>
-                <ThemedText style={styles.buttonText} type='defaultSemiBold'>Go to Budget</ThemedText>
+                <ThemedText style={styles.buttonText} type='defaultSemiBold'>Let's get started</ThemedText>
             </Link>
         </View>
     );
@@ -44,32 +61,67 @@ const NoBudgetInfo = () => {
 
 const styles = StyleSheet.create({
     container: {
-        alignItems: 'center',
+        flex: 1,
         padding: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    image: {
-        width: 400,
-        height: 200,
+    subTitle: {
         marginBottom: 20,
     },
+    miniText: {
+        marginVertical: 10,
+        textAlign: 'center',
+    },
+    image: {
+        width: '100%',
+        height: '100%',
+        resizeMode: 'contain',
+    },
     step: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 10,
+        paddingHorizontal: 5,
+        width: '70%',
+    },
+    text: {
+        fontSize: 14,
+        color: '#1E1E1E',
+    },
+    defaultSemiBold: {
+        color: '#1E1E1E',
     },
     button: {
+        width: '100%',
         marginBottom: 10,
-        backgroundColor: '#FDD848',
+        backgroundColor: purple,
         borderColor: '#1E1E1E',
         borderWidth: 1,
         padding: 20,
         borderRadius: 10,
-        display: 'flex',
-        alignItems: 'center',
     },
     buttonText: {
         color: '#1E1E1E',
+        textAlign: 'center',
+    },
+    wrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 20,
+        backgroundColor: "#FFF7F7",
+        padding: 20,
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
+        elevation: 5,
+    },
+    imageBox: {
+        width: '30%',
+        height: 80,
     },
 });
 
-export default NoBudgetInfo;
+export default WelcomeScreen;

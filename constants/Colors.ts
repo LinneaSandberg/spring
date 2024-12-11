@@ -4,6 +4,7 @@ export const green = "#B3DAAB";
 export const yellow = "#FFD700";
 export const blue = "#9AB2D4";
 export const pink = "#F6C3AE";
+export const purple = "#D8BCEF";
 
 export const Colors = {
   light: {

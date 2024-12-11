@@ -3,7 +3,7 @@ import SmallBudgetCard from "@/components/SmallBudgetCard";
 import ExpenseListItem from "@/components/ExpensesListItem";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { ThemedText } from "@/components/ThemedText";
-import { green } from "@/constants/Colors";
+import { green, purple, yellow } from "@/constants/Colors";
 import useBudget from "@/hooks/useBudget";
 import useUser from "@/hooks/useUser";
 import { db } from "@/services/firebase";
@@ -12,6 +12,8 @@ import { Link } from "expo-router";
 import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { View, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
+import AnimatedText from "@/components/AnimatedText";
 
 const HomeScreen = () => {
     const { data: userData, loading: userLoading } = useUser();
@@ -59,13 +61,14 @@ const HomeScreen = () => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.titlePosition}>
-                <ThemedText type="title">Hello, {userData?.name}!</ThemedText>
-            </View>
-
             {!budget && (
-                <View style={styles.titlePosition}>
-                    <ThemedText type="subtitle" style={styles.margin}>No budget found, create one!</ThemedText>
+                <View style={styles.postion}>
+                    <View style={styles.titlePosition}>
+                        <ThemedText type="title">Hello, </ThemedText>
+                        <AnimatedText text={`${userData?.name}`} />
+                    </View>
+                    <ThemedText type="default" style={styles.margin}>
+                        No budget found, create one!</ThemedText>
                     <Link href={"/home/add"} style={styles.button}>
                         <ThemedText style={styles.buttonText} type='defaultSemiBold'>
                             Add a budget
@@ -76,6 +79,9 @@ const HomeScreen = () => {
 
             {budget && (
                 <>
+                    <View style={styles.titlePos}>
+                        <ThemedText type="title" style={styles.titleAlign}>Hello, {userData?.name}!</ThemedText>
+                    </View>
                     <Link style={styles.button} href={`/home/edit?month=${currentMonth}&year=${currentYear}`}>
                         <ThemedText style={styles.buttonText} type='defaultSemiBold'>Update {currentDate.toLocaleString('default', { month: 'long' })}'s Budget</ThemedText>
                     </Link>
@@ -149,11 +155,26 @@ const styles = StyleSheet.create({
         padding: 20,
         boxSizing: 'border-box',
     },
-    titlePosition: {
-        marginTop: 60,
+    postion: {
+        marginTop: "40%",
         marginBottom: 20,
         display: 'flex',
         alignItems: 'center',
+    },
+    titlePosition: {
+        marginTop: "40%",
+        marginBottom: 20,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    titlePos: {
+        marginTop: 60,
+        marginBottom: 20,
+    },
+    titleAlign: {
+        textAlign: 'center',
     },
     title: {
         fontSize: 30,
@@ -172,8 +193,9 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     button: {
+        width: '100%',
         marginBottom: 10,
-        backgroundColor: '#D8BCEF',
+        backgroundColor: purple,
         borderColor: '#1E1E1E',
         borderWidth: 1,
         padding: 20,

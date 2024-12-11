@@ -1,4 +1,4 @@
-import { ThemedText } from '@/components/ThemedText';
+import AnimatedText from '@/components/AnimatedText';
 import { Link } from 'expo-router';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
@@ -7,11 +7,8 @@ const LandingPage = () => {
     return (
         <View style={styles.container}>
             <View style={styles.text}>
-                <ThemedText type="title">SPRING</ThemedText>
+                <AnimatedText text='Spring' />
             </View>
-            {/* <ThemedText style={styles.description}>
-                Bring spring to your economy
-            </ThemedText> */}
             <View style={styles.buttons}>
                 <Link style={styles.loginLink} href="/login">Login</Link>
                 <Link style={styles.signupLink} href="/signup">Register an account</Link>
@@ -62,7 +59,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 20,
         borderRadius: 10,
-    }
+    },
 });
 
 export default LandingPage;

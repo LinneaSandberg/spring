@@ -17,9 +17,9 @@ const DatePicker: React.FC<DatePickerProps> = ({ control, name, label }) => {
 
     return (
         <View style={styles.container}>
-            <ThemedText type='default'>{label}</ThemedText>
+            <ThemedText type='default' style={styles.label}>{label}</ThemedText>
             <TouchableOpacity style={styles.button} onPress={() => setShowDatePicker(true)}>
-                <ThemedText type='miniText'>{date.format('YYYY-MM-DD')}</ThemedText>
+                <ThemedText type='miniText' style={styles.color}>{date.format('YYYY-MM-DD')}</ThemedText>
             </TouchableOpacity>
 
             {showDatePicker && (
@@ -63,6 +63,9 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         color: '#333',
     },
+    color: {
+        color: '#333',
+    }
 });
 
 export default DatePicker;

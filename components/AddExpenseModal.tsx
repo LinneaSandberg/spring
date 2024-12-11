@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Modal, StyleSheet, TouchableOpacity, Switch, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView } from 'react-native';
+import { View, Modal, StyleSheet, TouchableOpacity, Switch, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, TextInput } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { ExpenseFormValues, VariableExpense } from '@/types/Budget.types';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -62,22 +62,54 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
 
                             <DatePicker control={control} name="date" label="Pick a date for the expense" />
 
-                            <InputField
-                                control={control}
-                                name="description"
-                                label="Description"
-                                placeholder="Description"
-                                error={errors.description?.message}
-                            />
+                            <View style={styles.inputContainer}>
+                                <ThemedText type="default" style={styles.inputLabel}>
+                                    Description
+                                </ThemedText>
+                                <Controller
+                                    control={control}
+                                    name="description"
+                                    render={({ field: { onChange, value } }) => (
+                                        <TextInput
+                                            style={styles.input}
+                                            placeholder="Description"
+                                            placeholderTextColor={'#ccc'}
+                                            onChangeText={onChange}
+                                            value={value}
+                                        />
+                                    )}
+                                />
+                                {errors.description && (
+                                    <ThemedText style={styles.error}>
+                                        {errors.description.message}
+                                    </ThemedText>
+                                )}
+                            </View>
 
-                            <InputField
-                                control={control}
-                                name="amount"
-                                label="Amount"
-                                placeholder="Amount"
-                                keyboardType="numeric"
-                                error={errors.amount?.message}
-                            />
+                            <View style={styles.inputContainer}>
+                                <ThemedText type="default" style={styles.inputLabel}>
+                                    Amount
+                                </ThemedText>
+                                <Controller
+                                    control={control}
+                                    name="amount"
+                                    render={({ field: { onChange, value } }) => (
+                                        <TextInput
+                                            style={styles.input}
+                                            placeholder="Amount"
+                                            placeholderTextColor={'#ccc'}
+                                            keyboardType="numeric"
+                                            onChangeText={(text) => onChange(parseFloat(text) || 0)}
+                                            value={value.toString()}
+                                        />
+                                    )}
+                                />
+                                {errors.amount && (
+                                    <ThemedText style={styles.error}>
+                                        {errors.amount.message}
+                                    </ThemedText>
+                                )}
+                            </View>
 
                             <View style={styles.switchContainer}>
                                 <ThemedText style={styles.color} type='miniBold'>Unecessary</ThemedText>
@@ -151,7 +183,7 @@ const styles = StyleSheet.create({
         padding: 10,
         borderWidth: 1,
         borderColor: '#ccc',
-        borderRadius: 5,
+        borderRadius: 10,
     },
     switchContainer: {
         flexDirection: 'row',

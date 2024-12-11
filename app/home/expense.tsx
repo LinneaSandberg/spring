@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         textAlign: 'center',
+        color: '#1E1E1E',
     }
 });
 

@@ -44,7 +44,7 @@ const BudgetScreen = () => {
     return (
         <View style={styles.container}>
             <View style={styles.card}>
-                <ThemedText type='title'>Budget for {budget.month}/{budget.year}</ThemedText>
+                <ThemedText type='title' style={styles.color}>Budget for {budget.month}/{budget.year}</ThemedText>
 
                 <View style={styles.summary}>
                     <ThemedText style={styles.color}>Total income: {budget.totalIncome}</ThemedText>
@@ -62,7 +62,7 @@ const BudgetScreen = () => {
 
                 {budget.fixedExpenses && (
                     <View style={styles.expenseSection}>
-                        <ThemedText style={styles.sectionTitle}>Fixed Expenses</ThemedText>
+                        <ThemedText style={[styles.sectionTitle, styles.color]}>Fixed Expenses</ThemedText>
                         {Object.keys(budget.fixedExpenses).length > 0
                             ? renderExpenses(budget.fixedExpenses)
                             : <ThemedText style={styles.emptyText}>No fixed expenses found.</ThemedText>
@@ -73,10 +73,10 @@ const BudgetScreen = () => {
                 {budget.variableExpenses && budget.variableExpenses.expenses.length > 0 && (
                     <View style={styles.expenseSection}>
                         <ThemedText type="miniText" style={[styles.color, styles.smalMar]}>Amount spent throughout the month{" "}
-                            <ThemedText type="miniBold">{budget.variableExpenses.totalSum}</ThemedText>
+                            <ThemedText type="miniBold" style={styles.color}>{budget.variableExpenses.totalSum}</ThemedText>
                         </ThemedText>
                         <ThemedText type="miniText" style={[styles.color, styles.smalMar]}>Money left to spend{" "}
-                            <ThemedText type="miniBold">{budget.remainingBalance - budget.variableExpenses.totalSum}</ThemedText>
+                            <ThemedText type="miniBold" style={styles.color}>{budget.remainingBalance - budget.variableExpenses.totalSum}</ThemedText>
                         </ThemedText>
 
                     </View>
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     },
     card: {
         padding: 40,
-        backgroundColor: pink,
+        backgroundColor: "#FFF7F7",
         borderRadius: 8,
         marginBottom: 20,
         shadowColor: '#000',
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     },
     emptyText: {
         fontStyle: 'italic',
-        color: '#888',
+        color: 'red',
     },
     button: {
         width: '100%',
