@@ -9,6 +9,7 @@ import { loginSchema } from "@/validation/yupValidation";
 import { InputField } from "@/components/InputField";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ThemedText } from "@/components/ThemedText";
+import { purple } from "@/constants/Colors";
 
 const LoginScreen = () => {
   const { login } = useAuth();
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginBottom: 10,
-    backgroundColor: '#D8BCEF',
+    backgroundColor: purple,
     borderColor: '#1E1E1E',
     borderWidth: 1,
     padding: 20,

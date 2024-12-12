@@ -3,7 +3,7 @@ import SmallBudgetCard from "@/components/SmallBudgetCard";
 import ExpenseListItem from "@/components/ExpensesListItem";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { ThemedText } from "@/components/ThemedText";
-import { green, purple, yellow } from "@/constants/Colors";
+import { blue, green, purple, yellow } from "@/constants/Colors";
 import useBudget from "@/hooks/useBudget";
 import useUser from "@/hooks/useUser";
 import { db } from "@/services/firebase";
@@ -12,7 +12,6 @@ import { Link } from "expo-router";
 import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { View, StyleSheet, TouchableOpacity, Alert } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
 import AnimatedText from "@/components/AnimatedText";
 
 const HomeScreen = () => {
@@ -130,15 +129,18 @@ const HomeScreen = () => {
                     </TouchableOpacity>
 
                     <View style={[styles.savingBox, styles.margin]}>
-                        <ThemedText type="default" style={styles.buttonText}>Left to spend:</ThemedText>
 
+                        {budget.amountAfterBudgetting - budget.variableExpenses.totalSum >= 0 ? (
+                            <ThemedText type="default" style={styles.buttonText}>Left to spend:</ThemedText>
+                        ) : (
+                            <ThemedText type="default" style={styles.buttonText}>You have past your budget:</ThemedText>
+                        )}
                         <ThemedText type="title">
                             {budget.amountAfterBudgetting - budget.variableExpenses.totalSum}
                         </ThemedText>
                     </View>
                 </>
             )}
-
             <AddExpenseModal
                 visible={modalVisible}
                 onClose={handleCloseModal}
@@ -186,7 +188,7 @@ const styles = StyleSheet.create({
     link: {
         textAlign: 'center',
         marginBottom: 10,
-        backgroundColor: '#FFD700',
+        backgroundColor: yellow,
         borderColor: '#1E1E1E',
         borderWidth: 1,
         padding: 10,
@@ -225,7 +227,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     nesExpenses: {
-        backgroundColor: '#9AB2D4',
+        backgroundColor: blue,
         borderRadius: 10,
         width: '48%',
         padding: 3,
@@ -250,7 +252,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#B3DAAB',
+        backgroundColor: green,
         borderRadius: 10,
         height: 100,
     },

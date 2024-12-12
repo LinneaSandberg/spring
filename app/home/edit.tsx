@@ -28,7 +28,7 @@ const EditBudgetScreen = () => {
             const budgetRef = doc(collection(db, `users/${currentUser.uid}/budgets`), budget._id);
             const sumOfFixedExpenses = Object.values(data.fixedExpenses).reduce((sum, cost) => sum + cost, 0);
             const remainingBalance = data.totalIncome - sumOfFixedExpenses;
-            const amountAfterBudgetting = remainingBalance - (data.plannedExpenses ?? 0) - (data.plannedSaving ?? 0);
+            const amountAfterBudgetting = remainingBalance - (data.plannedSaving ?? 0);
 
 
             const updatedBudget: Partial<Budget> = {

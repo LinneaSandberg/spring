@@ -5,6 +5,7 @@ import { View, StyleSheet } from "react-native";
 import { DocumentData } from 'firebase/firestore';
 import { Months } from '@/enum/monthEnum';
 import { ThemedText } from './ThemedText';
+import { pink } from '@/constants/Colors';
 
 interface BudgetCardProps {
     budget: DocumentData;
@@ -36,10 +37,11 @@ const SmallBudgetCard: React.FC<BudgetCardProps> = ({ budget }) => {
                         <ThemedText style={styles.color} type='miniText'>Total income</ThemedText>
                         <ThemedText style={styles.color} type='default'>{budget.totalIncome}</ThemedText>
                     </View>
-                    <View style={styles.summaryItem}>
-                        <ThemedText style={styles.color} type='miniText'>Remaining balance</ThemedText>
-                        <ThemedText style={styles.color} type='default'>{budget.remainingBalance}</ThemedText>
-                    </View>
+                    {budget.plannedSaving && (
+                        <View style={styles.summaryItem}>
+                            <ThemedText style={styles.color} type='miniText'>Saving Goal</ThemedText>
+                            <ThemedText style={styles.color} type='default'>{budget.plannedSaving}</ThemedText>
+                        </View>)}
                     {budget.amountAfterBudgetting > 0 && (
                         <View style={styles.summaryItem}>
                             <ThemedText style={styles.color} type='miniText'>Left after budgeting</ThemedText>
@@ -57,7 +59,6 @@ const SmallBudgetCard: React.FC<BudgetCardProps> = ({ budget }) => {
                         }
                     </View>
                 )}
-
             </View>
         </View>
     );
@@ -65,7 +66,7 @@ const SmallBudgetCard: React.FC<BudgetCardProps> = ({ budget }) => {
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: '#F6C3AE',
+        backgroundColor: pink,
         borderRadius: 15,
         padding: 20,
         marginBottom: 10,

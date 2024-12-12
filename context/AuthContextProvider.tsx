@@ -1,5 +1,13 @@
 import React, { createContext, useState, useEffect, PropsWithChildren } from 'react';
-import { createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateEmail, updatePassword, User, UserCredential } from 'firebase/auth';
+import {
+    createUserWithEmailAndPassword,
+    onAuthStateChanged,
+    sendPasswordResetEmail,
+    signInWithEmailAndPassword,
+    signOut,
+    User,
+    UserCredential
+} from 'firebase/auth';
 import { auth } from '../services/firebase';
 import * as SecureStore from 'expo-secure-store';
 
@@ -10,11 +18,6 @@ interface AuthContextType {
     logout: () => Promise<void>;
     isLoading: boolean;
     resetPassword: (email: string) => Promise<void>;
-
-    // userEmail: string | null;
-    // userPassword: string | null;
-    // setEmail: (email: string) => void;
-    // setPassword: (password: string) => void;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -22,9 +25,6 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 const AuthContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [currentUser, setCurrentUser] = useState<User | null>(null);
-
-    // const [userEmail, setUserEmail] = useState<string | null>(null);
-    // const [userPassword, setUserPassword] = useState<string | null>(null);
 
     useEffect(() => {
         const loadSession = async () => {
@@ -69,20 +69,6 @@ const AuthContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
         return unsubscribe;
     }, []);
 
-    // const setEmail = async (email: string) => {
-    //     if (!currentUser) {
-    //         throw new Error("No current admin");
-    //     }
-    //     return updateEmail(currentUser, email);
-    // };
-
-    // const setPassword = async (password: string) => {
-    //     if (!currentUser) {
-    //         throw new Error("No current admin");
-    //     }
-    //     return updatePassword(currentUser, password);
-    // };
-
     return (
         <AuthContext.Provider value={{
             currentUser,
@@ -91,10 +77,6 @@ const AuthContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
             login,
             logout,
             resetPassword,
-            // userEmail,
-            // userPassword,
-            // setEmail,
-            // setPassword
         }}>
             {children}
         </AuthContext.Provider>

@@ -7,8 +7,8 @@ import DatePicker from './DatePicker';
 import { expenseSchema } from '@/validation/yupValidation';
 import { Timestamp } from 'firebase/firestore';
 import { FontAwesome } from '@expo/vector-icons';
-import { InputField } from './InputField';
 import { ThemedText } from './ThemedText';
+import { blue, yellow } from '@/constants/Colors';
 
 interface AddExpenseModalProps {
     visible: boolean;
@@ -120,7 +120,7 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
                                         <Switch
                                             value={value}
                                             onValueChange={onChange}
-                                            trackColor={{ false: "#767577", true: "#9AB2D4" }}
+                                            trackColor={{ false: "#767577", true: blue }}
                                             thumbColor={value ? "#FDD848" : "#f4f3f4"}
                                         />
                                     )}
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     modalButton: {
-        backgroundColor: '#FFD700',
+        backgroundColor: yellow,
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 5,

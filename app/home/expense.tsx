@@ -3,7 +3,7 @@ import useBudget from '@/hooks/useBudget';
 import ExpenseListItem from '@/components/ExpensesListItem';
 import { VariableExpense } from '@/types/Budget.types';
 import { ThemedText } from '@/components/ThemedText';
-import { blue, yellow } from '@/constants/Colors';
+import { blue, purple, yellow } from '@/constants/Colors';
 import { Link } from 'expo-router';
 import LoadingSpinner from '@/components/LoadingSpinner';
 
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     button: {
-        backgroundColor: '#D8BCEF',
+        backgroundColor: purple,
         borderColor: '#1E1E1E',
         borderWidth: 1,
         padding: 20,

@@ -37,6 +37,7 @@ export default function RootLayout() {
           <Stack.Screen name="home/add" />
           <Stack.Screen name="home/edit" />
           <Stack.Screen name="home/expense" />
+          <Stack.Screen name="home/report" />
         </Stack>
       </ThemeProvider>
     </AuthContextProvider>

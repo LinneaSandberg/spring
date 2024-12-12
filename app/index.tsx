@@ -1,4 +1,5 @@
 import AnimatedText from '@/components/AnimatedText';
+import { purple } from '@/constants/Colors';
 import { Link } from 'expo-router';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
         fontWeight: 'semibold',
         textAlign: 'center',
         marginBottom: 10,
-        backgroundColor: '#D8BCEF',
+        backgroundColor: purple,
         borderColor: '#1E1E1E',
         borderWidth: 1,
         padding: 20,
