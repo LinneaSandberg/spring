@@ -128,26 +128,30 @@ const HomeScreen = () => {
                         <ThemedText style={styles.buttonText} type='defaultSemiBold'>Add Expense</ThemedText>
                     </TouchableOpacity>
 
-                    <View style={[styles.savingBox, styles.margin]}>
-
-                        {budget.amountAfterBudgetting - budget.variableExpenses.totalSum >= 0 ? (
+                    {budget.amountAfterBudgetting - budget.variableExpenses.totalSum >= 0 ? (
+                        <View style={[styles.savingColor, styles.savingBox, styles.margin]}>
                             <ThemedText type="default" style={styles.buttonText}>Left to spend:</ThemedText>
-                        ) : (
-                            <ThemedText type="default" style={styles.buttonText}>You have past your budget:</ThemedText>
-                        )}
-                        <ThemedText type="title">
-                            {budget.amountAfterBudgetting - budget.variableExpenses.totalSum}
-                        </ThemedText>
-                    </View>
+                            <ThemedText type="title">
+                                {budget.amountAfterBudgetting - budget.variableExpenses.totalSum}
+                            </ThemedText>
+                        </View>
+                    ) : (
+                        <View style={[styles.passedColor, styles.savingBox, styles.margin]}>
+                            <ThemedText type="default" style={styles.buttonText}>You have past your budget:</ThemedText>                            <ThemedText type="title">
+                                {budget.amountAfterBudgetting - budget.variableExpenses.totalSum}
+                            </ThemedText>
+                        </View>
+                    )}
                 </>
-            )}
+            )
+            }
             <AddExpenseModal
                 visible={modalVisible}
                 onClose={handleCloseModal}
                 onSubmit={handleModalSubmit}
                 budgetId={budget?._id ?? ''}
             />
-        </View>
+        </View >
     );
 };
 
@@ -247,14 +251,19 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#1E1E1E',
     },
+    savingColor: {
+        backgroundColor: green,
+    },
     savingBox: {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: green,
         borderRadius: 10,
         height: 100,
+    },
+    passedColor: {
+        backgroundColor: '#ff3632',
     },
     budgetLink: {
         marginBottom: 10,
