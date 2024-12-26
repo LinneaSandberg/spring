@@ -28,7 +28,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
         try {
             await onRegister(data);
         } catch (error) {
-            console.error("Registration failed:", error);
+            alert("Registration failed, try again later.");
         } finally {
             setIsRegistering(false);
         }

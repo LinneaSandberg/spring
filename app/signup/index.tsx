@@ -22,7 +22,7 @@ const RegisterScreen = () => {
             if (error instanceof FirebaseError) {
                 switch (error.code) {
                     case 'auth/email-already-in-use':
-                        alert('This email is already in use.');
+                        alert('An error occurred when registering the user.');
                         break;
                     case 'auth/weak-password':
                         alert('The password is too weak.');

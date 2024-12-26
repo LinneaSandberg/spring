@@ -33,14 +33,14 @@ const BudgetReportScreen = () => {
 
             <View style={styles.card}>
                 <View style={styles.textContainer}>
-                    <ThemedText type="miniText">Total Expenses: {budget.variableExpenses.totalSum}</ThemedText>
-                    <ThemedText type="miniText">Planned Savings: {budget.plannedSaving}</ThemedText>
-                    <ThemedText type="miniText">Remaining Balance: {budget.remainingBalance}</ThemedText>
-                    <ThemedText type="miniText">Amount After Budgeting: {budget.amountAfterBudgetting}</ThemedText>
+                    <ThemedText type="miniText" style={styles.textColor}>Total Expenses: {budget.variableExpenses.totalSum}</ThemedText>
+                    <ThemedText type="miniText" style={styles.textColor}>Planned Savings: {budget.plannedSaving}</ThemedText>
+                    <ThemedText type="miniText" style={styles.textColor}>Remaining Balance: {budget.remainingBalance}</ThemedText>
+                    <ThemedText type="miniText" style={styles.textColor}>Amount After Budgeting: {budget.amountAfterBudgetting}</ThemedText>
                 </View>
 
                 <View style={styles.progressContainer}>
-                    <ThemedText type="defaultSemiBold" style={styles.color}>{result}</ThemedText>
+                    <ThemedText type="defaultSemiBold" style={[styles.color, styles.textColor]}>{result}</ThemedText>
                 </View>
             </View>
 
@@ -119,6 +119,9 @@ const styles = StyleSheet.create({
     },
     color: {
         marginTop: 10,
+    },
+    textColor: {
+        color: '#1E1E1E',
     }
 });
 

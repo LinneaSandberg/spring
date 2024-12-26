@@ -34,10 +34,10 @@ const LoginScreen = () => {
       if (error instanceof FirebaseError) {
         switch (error.code) {
           case "auth/user-not-found":
-            alert("User not found.");
+            alert("An error occurred when logging in.");
             break;
           case "auth/wrong-password":
-            alert("Wrong password.");
+            alert("An error occurred when logging in.");
             break;
           default:
             alert("An error occurred when logging in.");

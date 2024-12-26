@@ -39,7 +39,6 @@ const EditBudgetScreen = () => {
             };
 
             await updateDoc(budgetRef, updatedBudget);
-
             Alert.alert("Success", "Budget updated successfully!");
 
             setTimeout(() => {

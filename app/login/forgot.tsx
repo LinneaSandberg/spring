@@ -37,7 +37,7 @@ const ForgotPasswordScreen = () => {
             if (error instanceof FirebaseError) {
                 switch (error.code) {
                     case "auth/user-not-found":
-                        alert("User not found.");
+                        alert("An error occurred when trying to access that user.");
                         break;
                     default:
                         alert("An error occurred.");
