@@ -86,12 +86,17 @@ const LoginScreen = () => {
         </ThemedText>
       </TouchableOpacity>
 
+      <Link style={styles.registerLink} href="/signup">
+        <ThemedText type='default'>
+          Don't have an account? Register here.
+        </ThemedText>
+      </Link>
+
       <Link style={styles.registerLink} href="/login/forgot">
         <ThemedText type='default'>
           Forgot your password?
         </ThemedText>
       </Link>
-
     </View>
   );
 };

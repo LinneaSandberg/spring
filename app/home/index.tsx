@@ -131,15 +131,12 @@ const HomeScreen = () => {
                     {budget.amountAfterBudgetting - budget.variableExpenses.totalSum >= 0 ? (
                         <View style={[styles.savingColor, styles.savingBox, styles.margin]}>
                             <ThemedText type="default" style={styles.buttonText}>Left to spend:</ThemedText>
-                            <ThemedText type="title">
-                                {budget.amountAfterBudgetting - budget.variableExpenses.totalSum}
-                            </ThemedText>
+                            <ThemedText type="title">{budget.amountAfterBudgetting - budget.variableExpenses.totalSum}</ThemedText>
                         </View>
                     ) : (
                         <View style={[styles.passedColor, styles.savingBox, styles.margin]}>
-                            <ThemedText type="default" style={styles.buttonText}>You have past your budget:</ThemedText>                            <ThemedText type="title">
-                                {budget.amountAfterBudgetting - budget.variableExpenses.totalSum}
-                            </ThemedText>
+                            <ThemedText type="default" style={styles.buttonText}>You have past your budget:</ThemedText>
+                            <ThemedText type="title">{budget.amountAfterBudgetting - budget.variableExpenses.totalSum}</ThemedText>
                         </View>
                     )}
                 </>

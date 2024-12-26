@@ -78,7 +78,6 @@ const BudgetScreen = () => {
                         <ThemedText type="miniText" style={[styles.color, styles.smalMar]}>Money left to spend{" "}
                             <ThemedText type="miniBold" style={styles.color}>{budget.remainingBalance - budget.variableExpenses.totalSum}</ThemedText>
                         </ThemedText>
-
                     </View>
                 )}
             </View>

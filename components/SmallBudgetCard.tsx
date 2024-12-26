@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         padding: 20,
         marginBottom: 10,
+        width: '100%',
     },
     boxes: {
         display: 'flex',
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     expenseSection: {
-        marginLeft: 10,
+        marginLeft: 20,
     },
     expenseItem: {
         flexDirection: 'row',

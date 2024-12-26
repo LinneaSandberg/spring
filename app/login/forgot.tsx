@@ -5,7 +5,7 @@ import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { View, TouchableOpacity, StyleSheet } from "react-native";
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useRouter } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { forgotPasswordSchema } from "@/validation/yupValidation";
 import { InputField } from "@/components/InputField";
 import { ThemedText } from "@/components/ThemedText";
@@ -79,6 +79,12 @@ const ForgotPasswordScreen = () => {
                 </ThemedText>
             </TouchableOpacity>
 
+            <Link style={styles.registerLink} href="/login">
+                <ThemedText type='default'>
+                    Remembered your password? Login here.
+                </ThemedText>
+            </Link>
+
             {isSuccess && (
                 <ThemedText style={styles.successMessage}>
                     We have sent you an email with instructions to reset your password.
@@ -118,6 +124,10 @@ const styles = StyleSheet.create({
         color: 'green',
         textAlign: 'center',
         marginTop: 20,
+    },
+    registerLink: {
+        textAlign: 'center',
+        marginTop: 10,
     }
 });
 

@@ -1,17 +1,62 @@
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList, Alert, TouchableOpacity } from 'react-native';
 import useBudget from '@/hooks/useBudget';
 import ExpenseListItem from '@/components/ExpensesListItem';
-import { VariableExpense } from '@/types/Budget.types';
+import { Budget, VariableExpense } from '@/types/Budget.types';
 import { ThemedText } from '@/components/ThemedText';
 import { blue, purple, yellow } from '@/constants/Colors';
 import { Link } from 'expo-router';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import { useCallback, useEffect, useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
+import { arrayRemove, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { db } from '@/services/firebase';
 
 const ExpenseScreen = () => {
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth() + 1;
     const currentYear = currentDate.getFullYear();
     const { budget, loading } = useBudget(currentMonth, currentYear);
+    const { currentUser } = useAuth();
+    const [necessaryExpenses, setNecessaryExpenses] = useState<VariableExpense[]>([]);
+    const [unnecessaryExpenses, setUnnecessaryExpenses] = useState<VariableExpense[]>([]);
+
+    useEffect(() => {
+        if (budget) {
+            setNecessaryExpenses(budget.variableExpenses.expenses.filter((expense: VariableExpense) => expense.necessary));
+            setUnnecessaryExpenses(budget.variableExpenses.expenses.filter((expense: VariableExpense) => !expense.necessary));
+        }
+    }, [budget]);
+
+    const handleDeleteExpense = useCallback(async (expenseToDelete: VariableExpense) => {
+        try {
+            Alert.alert(
+                "Confirm Delete",
+                `Are you sure you want to delete ${expenseToDelete.description}?`,
+                [
+                    { text: "Cancel", style: "cancel" },
+                    {
+                        text: "Delete",
+                        style: "destructive",
+                        onPress: async () => {
+                            const budgetRef = doc(db, `users/${currentUser?.uid}/budgets`, expenseToDelete._id);
+                            const budgetDoc = await getDoc(budgetRef);
+                            const budgetData = budgetDoc.data() as Budget;
+                            const newTotalSum = budgetData.variableExpenses.totalSum - expenseToDelete.amount;
+
+                            await updateDoc(budgetRef, {
+                                'variableExpenses.expenses': arrayRemove(expenseToDelete),
+                                'variableExpenses.totalSum': newTotalSum,
+                            });
+                            setNecessaryExpenses(necessaryExpenses.filter(expense => expense._id !== expenseToDelete._id));
+                            setUnnecessaryExpenses(unnecessaryExpenses.filter(expense => expense._id !== expenseToDelete._id));
+                        }
+                    }
+                ]
+            );
+        } catch (error) {
+            Alert.alert("Error", "Failed to delete expense. Please try again.");
+        }
+    }, [necessaryExpenses, unnecessaryExpenses, currentUser?.uid]);
 
     if (loading) {
         return <LoadingSpinner />;
@@ -21,20 +66,25 @@ const ExpenseScreen = () => {
         return <ThemedText>Budget not found.</ThemedText>;
     }
 
-    const necessaryExpenses: VariableExpense[] = budget.variableExpenses.expenses.filter((expense: VariableExpense) => expense.necessary);
-    const unnecessaryExpenses: VariableExpense[] = budget.variableExpenses.expenses.filter((expense: VariableExpense) => !expense.necessary);
-
     return (
         <View style={styles.main}>
             <ThemedText type='subtitle' style={styles.title}>All your expenses for {currentDate.toLocaleString('default', { month: 'long' })}</ThemedText>
-
 
             {necessaryExpenses.length > 0 && unnecessaryExpenses.length === 0 ? (
                 <View style={styles.expenseSection}>
                     <ThemedText type='defaultSemiBold' style={styles.subTitle}>Necessary Expenses</ThemedText>
                     <FlatList
                         data={necessaryExpenses}
-                        renderItem={({ item }) => <ExpenseListItem expense={item} />}
+                        renderItem={({ item, index }) => (
+                            <View key={index} style={styles.expenseItem}>
+                                <ExpenseListItem expense={item} />
+                                <View style={styles.buttonsContainer}>
+                                    <TouchableOpacity onPress={() => handleDeleteExpense(item)} style={styles.deleteButton}>
+                                        <ThemedText type="miniText">Delete</ThemedText>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        )}
                         keyExtractor={(item, index) => item._id + index}
                         style={styles.necessaryList}
                         showsVerticalScrollIndicator={false}
@@ -46,7 +96,16 @@ const ExpenseScreen = () => {
                     <ThemedText type='defaultSemiBold' style={styles.subTitle}>Unnecessary Expenses</ThemedText>
                     <FlatList
                         data={unnecessaryExpenses}
-                        renderItem={({ item }) => <ExpenseListItem expense={item} />}
+                        renderItem={({ item, index }) => (
+                            <View key={index} style={styles.expenseItem}>
+                                <ExpenseListItem expense={item} />
+                                <View style={styles.buttonsContainer}>
+                                    <TouchableOpacity onPress={() => handleDeleteExpense(item)} style={styles.deleteButton}>
+                                        <ThemedText type="miniText">Delete</ThemedText>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        )}
                         keyExtractor={(item, index) => item._id + index}
                         style={styles.unnecessaryList}
                         showsVerticalScrollIndicator={false}
@@ -59,8 +118,16 @@ const ExpenseScreen = () => {
                         <ThemedText type='defaultSemiBold' style={styles.subTitle}>Necessary Expenses</ThemedText>
                         <FlatList
                             data={necessaryExpenses}
-                            renderItem={({ item }) => <ExpenseListItem expense={item} />}
-                            keyExtractor={(item, index) => item._id + index}
+                            renderItem={({ item, index }) => (
+                                <View key={index} style={styles.expenseItem}>
+                                    <ExpenseListItem expense={item} />
+                                    <View style={styles.buttonsContainer}>
+                                        <TouchableOpacity onPress={() => handleDeleteExpense(item)} style={styles.deleteButton}>
+                                            <ThemedText type="miniText">Delete</ThemedText>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            )} keyExtractor={(item, index) => item._id + index}
                             style={styles.necessaryList}
                             showsVerticalScrollIndicator={false}
                             nestedScrollEnabled={true}
@@ -70,8 +137,16 @@ const ExpenseScreen = () => {
                         <ThemedText type='defaultSemiBold' style={styles.subTitle}>Unnecessary Expenses</ThemedText>
                         <FlatList
                             data={unnecessaryExpenses}
-                            renderItem={({ item }) => <ExpenseListItem expense={item} />}
-                            keyExtractor={(item, index) => item._id + index}
+                            renderItem={({ item, index }) => (
+                                <View key={index} style={styles.expenseItem}>
+                                    <ExpenseListItem expense={item} />
+                                    <View style={styles.buttonsContainer}>
+                                        <TouchableOpacity onPress={() => handleDeleteExpense(item)} style={styles.deleteButton}>
+                                            <ThemedText type="miniText">Delete</ThemedText>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            )} keyExtractor={(item, index) => item._id + index}
                             style={styles.unnecessaryList}
                             showsVerticalScrollIndicator={false}
                             nestedScrollEnabled={true}
@@ -98,6 +173,16 @@ const styles = StyleSheet.create({
         marginTop: 60,
         marginBottom: 20,
         textAlign: 'center',
+    },
+    expenseItem: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        marginVertical: 5,
+        marginHorizontal: 10,
+    },
+    buttonsContainer: {
+        flex: 1,
+        alignItems: 'flex-end',
     },
     expenseSection: {
         marginBottom: 30,
@@ -128,6 +213,13 @@ const styles = StyleSheet.create({
         borderColor: '#1E1E1E',
         borderWidth: 1,
         padding: 20,
+        borderRadius: 10,
+    },
+    deleteButton: {
+        backgroundColor: 'red',
+        borderColor: "#1E1E1E",
+        borderWidth: 1,
+        padding: 5,
         borderRadius: 10,
     },
     buttonText: {

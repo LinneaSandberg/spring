@@ -7,6 +7,7 @@ import LoadingSpinner from '../LoadingSpinner';
 import { InputField } from '../InputField';
 import { registrationSchema } from '@/validation/yupValidation';
 import { ThemedText } from '../ThemedText';
+import { Link } from 'expo-router';
 
 interface RegisterFormProps {
     onRegister: SubmitHandler<RegisterInfo>;
@@ -88,6 +89,12 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
                     {isRegistering ? "Registering..." : "Register"}
                 </ThemedText>
             </TouchableOpacity>
+
+            <Link style={styles.registerLink} href="/login">
+                <ThemedText type='default'>
+                    Already have an account? Login here.
+                </ThemedText>
+            </Link>
         </View>
     );
 };
@@ -118,6 +125,10 @@ const styles = StyleSheet.create({
     buttonDisabled: {
         backgroundColor: '#A9A9A9',
     },
+    registerLink: {
+        textAlign: 'center',
+        marginTop: 10,
+    }
 });
 
 export default RegisterForm;

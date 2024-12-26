@@ -2,21 +2,20 @@ import AnimatedText from '@/components/AnimatedText';
 import { ThemedText } from '@/components/ThemedText';
 import { purple } from '@/constants/Colors';
 import { Link } from 'expo-router';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import Entypo from '@expo/vector-icons/Entypo';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 const WelcomeScreen = () => {
     return (
         <View style={styles.container}>
             <AnimatedText text='Spring' />
-
             <ThemedText type='defaultSemiBold' style={styles.subTitle}>Bring spring into your economy</ThemedText>
 
             <View style={styles.wrapper}>
                 <View style={styles.imageBox}>
-                    <Image
-                        source={require('../../assets/images/flower.jpeg')}
-                        style={styles.image}
-                    />
+                    <AntDesign name="edit" size={80} color="#B3DAAB" />
                 </View>
                 <View style={styles.step}>
                     <ThemedText type='defaultSemiBold' style={styles.defaultSemiBold}>First</ThemedText>
@@ -30,19 +29,13 @@ const WelcomeScreen = () => {
                     <ThemedText style={styles.text}>Track your spendings with necessary and unecessary expenses.</ThemedText>
                 </View>
                 <View style={styles.imageBox}>
-                    <Image
-                        source={require('../../assets/images/flower.jpeg')}
-                        style={styles.image}
-                    />
+                    <Entypo name="line-graph" size={80} color="#9AB2D4" />
                 </View>
             </View>
 
             <View style={styles.wrapper}>
                 <View style={styles.imageBox}>
-                    <Image
-                        source={require('../../assets/images/flower.jpeg')}
-                        style={styles.image}
-                    />
+                    <MaterialIcons name="savings" size={80} color="#FFD700" />
                 </View>
                 <View style={styles.step}>
                     <ThemedText type='defaultSemiBold' style={styles.defaultSemiBold}>Finally</ThemedText>
