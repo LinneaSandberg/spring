@@ -1,6 +1,6 @@
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { ThemedText } from "@/components/ThemedText";
-import { purple } from "@/constants/Colors";
+import { purple, pink } from "@/constants/Colors";
 import useBudget from "@/hooks/useBudget";
 import { Expenses } from "@/types/Budget.types";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -82,7 +82,7 @@ const BudgetScreen = () => {
                     </View>
                 )}
             </View>
-            <Link href={"/home"} style={styles.button}>
+            <Link href={"/home"} style={[styles.button, styles.buttonColor]}>
                 <ThemedText type='defaultSemiBold' style={styles.buttonText}>Back to Overview</ThemedText>
             </Link>
 
@@ -156,6 +156,10 @@ const styles = StyleSheet.create({
     },
     color: {
         color: '#1E1E1E',
+    },
+    buttonColor: {
+        backgroundColor: pink,
+        marginBottom: 10,
     }
 });
 

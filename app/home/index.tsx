@@ -52,7 +52,7 @@ const HomeScreen = () => {
     };
 
     useEffect(() => {
-    }, [budget]);
+    }, [budget, userLoading, budgetLoading]);
 
     if (userLoading || budgetLoading) {
         return <LoadingSpinner />;

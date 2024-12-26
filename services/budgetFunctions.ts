@@ -5,38 +5,22 @@ export const calculateMonthlyResult = (
   amountAfterBudgetting: number
 ): string => {
   const totalRemainingBalanceAfterMonth = remainingBalance - totalSumExpenses;
-  const diffrenceTotalRemainingBalanceAfterMonth =
-    amountAfterBudgetting - totalRemainingBalanceAfterMonth;
-
   const budgetDifference = amountAfterBudgetting - totalSumExpenses;
 
   let result = "";
 
-  // if (diffrenceTotalRemainingBalanceAfterMonth > 0) {
-  //   result += `Du har ${diffrenceTotalRemainingBalanceAfterMonth} kr kvar av din budgeterade summa.\n`;
-  // } else if (diffrenceTotalRemainingBalanceAfterMonth < 0) {
-  //   result += `Du har överskridit din budgeterade summa med ${-diffrenceTotalRemainingBalanceAfterMonth} kr.\n`;
-  // } else {
-  //   result += `Du har använt exakt din budgeterade summa.\n`;
-  // }
-
   if (budgetDifference >= 0) {
-    result += `Grattis! Du höll dig inom budgeten med ${budgetDifference} kr kvar.\n`;
+    result += `Congratulations! You stayed within your budget with ${budgetDifference} kr left.\n`;
   } else {
-    result += `Tyvärr överskred du budgeten med ${-budgetDifference} kr.\n`;
+    result += `Unfortunately, you exceeded your budget by ${-budgetDifference} kr.\n`;
   }
 
-  console.log(
-    "totalRemainingBalanceAfterMonth",
-    totalRemainingBalanceAfterMonth
-  );
-
   if (totalRemainingBalanceAfterMonth >= (plannedSavings ?? 0)) {
-    result += `Du nådde dina sparmål! 🥳\n`;
+    result += `You reached your savings goals! 🥳\n`;
   } else {
     const savingsShortfall =
       (plannedSavings ?? 0) - totalRemainingBalanceAfterMonth;
-    result += `Du nådde inte dina sparmål och sparade ${savingsShortfall} kr mindre än planerat.\n`;
+    result += `You did not meet your savings goals and saved ${savingsShortfall} kr less than planned.\n`;
   }
 
   return result;
