@@ -76,7 +76,7 @@ const BudgetScreen = () => {
                             <ThemedText type="miniBold" style={styles.color}>{budget.variableExpenses.totalSum}</ThemedText>
                         </ThemedText>
                         <ThemedText type="miniText" style={[styles.color, styles.smalMar]}>Money left to spend{" "}
-                            <ThemedText type="miniBold" style={styles.color}>{budget.remainingBalance - budget.variableExpenses.totalSum}</ThemedText>
+                            <ThemedText type="miniBold" style={styles.color}>{budget.amountAfterBudgetting - budget.variableExpenses.totalSum}</ThemedText>
                         </ThemedText>
                     </View>
                 )}
